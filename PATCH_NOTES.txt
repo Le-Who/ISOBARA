@@ -1,0 +1,13 @@
+ISOBARA 1.0.0 startup patch
+
+Fixes:
+1. JavaScript parse error at original Isobara.html line 1590:
+   Identifier 'module' has already been declared.
+2. The game is now opened through a localhost HTTP server instead of file://,
+   avoiding browser unique-origin restrictions for local files.
+
+Install:
+- Copy/extract the contents of this patch into the ISOBARA-1.0.0 folder.
+- Allow replacement of dist\Isobara.html and START_GAME.cmd if Windows asks.
+- Run START_GAME.cmd.
+- Keep the command window open while playing.

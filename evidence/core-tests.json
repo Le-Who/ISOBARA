@@ -1,0 +1,36 @@
+{
+  "environment": {
+    "node": "v24.13.0"
+  },
+  "tests": [],
+  "distributions": [
+    {
+      "distance": 20,
+      "meanTier": 1,
+      "specialRate": 0
+    },
+    {
+      "distance": 60,
+      "meanTier": 1.93975,
+      "specialRate": 0.09925
+    },
+    {
+      "distance": 120,
+      "meanTier": 3.14525,
+      "specialRate": 0.33875
+    },
+    {
+      "distance": 195,
+      "meanTier": 4.51375,
+      "specialRate": 0.65925
+    }
+  ],
+  "starts": 100,
+  "generation": {
+    "count": 1500,
+    "fallback": 0,
+    "maxRooms": 9,
+    "maxMs": 23.504599999999982,
+    "totalMs": 5520.205199999999
+  }
+}

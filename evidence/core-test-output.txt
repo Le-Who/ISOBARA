@@ -1,0 +1,81 @@
+
+> isobara@1.0.0 test
+> node tools/build.mjs --test && node --test tests/*.test.mjs
+
+Test modules compiled with TypeScript 5.8.3.
+TAP version 13
+# Subtest: Seed streams are deterministic; invalid weights fail explicitly
+ok 1 - Seed streams are deterministic; invalid weights fail explicitly
+  ---
+  duration_ms: 1.921497
+  type: 'test'
+  ...
+# Subtest: Distance changes portal distributions, with safe starting zone
+ok 2 - Distance changes portal distributions, with safe starting zone
+  ---
+  duration_ms: 19.527186
+  type: 'test'
+  ...
+# Subtest: World is independent of chunk load order; starts and routes are walkable
+ok 3 - World is independent of chunk load order; starts and routes are walkable
+  ---
+  duration_ms: 692.51599
+  type: 'test'
+  ...
+# Subtest: 1500 dungeon seeds, every tier and theme: physical connectivity and finite objectives
+ok 4 - 1500 dungeon seeds, every tier and theme: physical connectivity and finite objectives
+  ---
+  duration_ms: 3863.693198
+  type: 'test'
+  ...
+# Subtest: Forced fallback is a complete playable map for every tier
+ok 5 - Forced fallback is a complete playable map for every tier
+  ---
+  duration_ms: 48.496652
+  type: 'test'
+  ...
+# Subtest: Rewards are valid, distinct, reproducible and include real skill effects
+ok 6 - Rewards are valid, distinct, reproducible and include real skill effects
+  ---
+  duration_ms: 14.614048
+  type: 'test'
+  ...
+# Subtest: Mastered-tier fallback is explicit, never empty or +0
+ok 7 - Mastered-tier fallback is explicit, never empty or +0
+  ---
+  duration_ms: 0.248455
+  type: 'test'
+  ...
+# Subtest: Claim is exactly once, preserved through export/import and full inventory
+ok 8 - Claim is exactly once, preserved through export/import and full inventory
+  ---
+  duration_ms: 9.345092
+  type: 'test'
+  ...
+# Subtest: Corrupt and incompatible saves never replace a valid game
+ok 9 - Corrupt and incompatible saves never replace a valid game
+  ---
+  duration_ms: 0.811814
+  type: 'test'
+  ...
+# Subtest: Respec is only outside expeditions, preserves earned ranks and affects actual stats
+ok 10 - Respec is only outside expeditions, preserves earned ranks and affects actual stats
+  ---
+  duration_ms: 0.628448
+  type: 'test'
+  ...
+# Subtest: Simulation normalizes diagonals and does not update while paused in reward/death
+ok 11 - Simulation normalizes diagonals and does not update while paused in reward/death
+  ---
+  duration_ms: 8.581571
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4743.903651

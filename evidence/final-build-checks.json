@@ -1,0 +1,17 @@
+{
+  "typecheck": {
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 2.39
+  },
+  "production-build": {
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 2.0
+  },
+  "javascript-syntax": {
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 0.11
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "method": "Playwright CLI on local Chromium; user-interface entry and retreat transitions, not a human playtest or proof of a full combat campaign.",
+  "status": "passed",
+  "checks": [
+    { "name": "portal entry and retreat", "count": 20, "status": "passed" },
+    { "name": "JavaScript console errors", "count": 0, "status": "passed" },
+    { "name": "WebGL console errors", "count": 0, "status": "passed" }
+  ],
+  "errors": [],
+  "cycles": [
+    { "count": 20, "entryMs": { "min": 279, "max": 476 }, "returnMs": { "min": 611, "max": 807 } }
+  ],
+  "renderer": { "geometries": { "min": 43, "max": 48 }, "textures": 5 },
+  "fpsSampleRange": { "min": 41.7, "max": 48.0 },
+  "scope": "Targeted transition regression check; the full tests/browser_test.py suite was not run."
+}

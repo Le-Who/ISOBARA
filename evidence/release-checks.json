@@ -1,0 +1,43 @@
+{
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "commands": [
+    {
+      "name": "typecheck",
+      "command": "npm.cmd run check",
+      "exitCode": 0,
+      "status": "passed",
+      "seconds": 2.39
+    },
+    {
+      "name": "unit-and-generation",
+      "command": "npm.cmd test",
+      "exitCode": 0,
+      "status": "passed",
+      "seconds": 7.98
+    },
+    {
+      "name": "campaign",
+      "command": "node tests/playthrough.mjs",
+      "exitCode": 0,
+      "status": "passed",
+      "seconds": 7.38
+    },
+    {
+      "name": "production-build",
+      "command": "node tools/build.mjs",
+      "exitCode": 0,
+      "status": "passed",
+      "seconds": 2.0
+    },
+    {
+      "name": "javascript-syntax",
+      "command": "node --check dist/game.js",
+      "exitCode": 0,
+      "status": "passed",
+      "seconds": 0.11
+    }
+  ]
+}

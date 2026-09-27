@@ -1,0 +1,125 @@
+{
+  "origin": "Built-in image generation tool; exact internal model ID not exposed",
+  "assets": [
+    {
+      "file": "public/assets/cloak.webp",
+      "size": [
+        320,
+        285
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "2d4979df22b5a593b5eb1f5d52bd1e8859713d0c88e472ac46d78d2c7e26356d"
+    },
+    {
+      "file": "public/assets/coil.webp",
+      "size": [
+        320,
+        284
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "c0e96636fa3c98510067560353351e280e5ce8cb569f23d081950abd85c06159"
+    },
+    {
+      "file": "public/assets/fork.webp",
+      "size": [
+        320,
+        284
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "679855997d7e19cc0adb744802602b24b8ba828dce313dc7312b8c4c11960518"
+    },
+    {
+      "file": "public/assets/furnace.webp",
+      "size": [
+        320,
+        284
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "5eb4636aa76ec878843a488f6bf8fbae36cf2abfd4af1c0c1df673f67fbd80f1"
+    },
+    {
+      "file": "public/assets/gauge.webp",
+      "size": [
+        320,
+        284
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "0bb81c5ed6c74588df4c699142cd03eac24ec3f7f4b2e4f0a74bfb6b90dd446b"
+    },
+    {
+      "file": "public/assets/orb.webp",
+      "size": [
+        320,
+        284
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "2a7f5c733d5a246bf8240177431555055a43b4a92f8c66a66aeeb69efc33a165"
+    },
+    {
+      "file": "public/assets/prism.webp",
+      "size": [
+        320,
+        284
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "94c6a2f874c514e51a8c39cb13aa8f17e12bef441c34dd2473c37a6910869e0b"
+    },
+    {
+      "file": "public/assets/rotor.webp",
+      "size": [
+        320,
+        285
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "01ccbb8618fbd7d6a0c91315e45fdec779b14c2ca008e2528bab4d01ac67c6b9"
+    },
+    {
+      "file": "public/assets/seed.webp",
+      "size": [
+        320,
+        285
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "4a530ee1cefd6366acc9b115f85dae9183f523845f2443af598d00c72bf11fa5"
+    },
+    {
+      "file": "public/assets/tonic.webp",
+      "size": [
+        320,
+        284
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "070cf995ed799faab098573f7d014d922ff2e688ee62af1443b073920c664b5e"
+    },
+    {
+      "file": "public/assets/vest.webp",
+      "size": [
+        320,
+        284
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "ba9b4de1e859d3072dd2e641aae5d47da331e20445c5717f7adbee556e1666b4"
+    },
+    {
+      "file": "public/assets/void.webp",
+      "size": [
+        320,
+        285
+      ],
+      "mode": "RGBA",
+      "transparent": true,
+      "sha256": "2e03a66a8df837ea927788ac73badad2d90fe1b9b260db885221d02d556aacd6"
+    }
+  ]
+}

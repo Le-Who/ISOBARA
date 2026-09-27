@@ -1,0 +1,10 @@
+node_modules/
+.test-build/
+dev-dist/
+.playwright-cli/
+/evidence/fixtures/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db

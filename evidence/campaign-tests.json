@@ -1,0 +1,461 @@
+{
+  "method": "Production simulation; normal input frames and legitimate game actions. No state cheats. This is not a browser-rendering or human playtest.",
+  "environment": {
+    "node": "v24.13.0"
+  },
+  "results": [
+    {
+      "seed": 19320422,
+      "classId": "lineman",
+      "passed": true,
+      "records": [
+        {
+          "tier": 1,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 1427,
+          "seconds": 23.783333333333335,
+          "hp": 145,
+          "totalDamage": 0,
+          "remaining": 0,
+          "position": {
+            "x": 4.22726549987789,
+            "z": 64.38629413480282
+          },
+          "target": {
+            "id": "e:4:0",
+            "x": -2.636496137825888,
+            "z": 67.90485501139015,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 3,
+          "upgrade": "siphon"
+        },
+        {
+          "tier": 2,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 1640,
+          "seconds": 27.333333333333332,
+          "hp": 165,
+          "totalDamage": 0,
+          "remaining": 0,
+          "position": {
+            "x": 62.27045831892856,
+            "z": -5.990338999891235
+          },
+          "target": {
+            "id": "e:4:0",
+            "x": 57.52499086584424,
+            "z": 0.15232842346485442,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 5,
+          "upgrade": "pierce"
+        },
+        {
+          "tier": 3,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 2382,
+          "seconds": 39.7,
+          "hp": 229,
+          "totalDamage": 0,
+          "remaining": 0,
+          "position": {
+            "x": 147.31308309551275,
+            "z": 39.68133725279469
+          },
+          "target": {
+            "id": "e:5:0",
+            "x": 142.06447422612567,
+            "z": 34.03707682129116,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 8,
+          "upgrade": "chain"
+        },
+        {
+          "tier": 4,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 3820,
+          "seconds": 63.666666666666664,
+          "hp": 271,
+          "totalDamage": 0,
+          "remaining": 0,
+          "position": {
+            "x": -72.9446860778507,
+            "z": 23.026477716851563
+          },
+          "target": {
+            "id": "e:5:0",
+            "x": -68.16837772880012,
+            "z": 31.97205343055024,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 11,
+          "upgrade": "power"
+        },
+        {
+          "tier": 5,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 3096,
+          "seconds": 51.6,
+          "hp": 265.33111206384,
+          "totalDamage": 37.66888793615999,
+          "remaining": 0,
+          "position": {
+            "x": 180.91959891177868,
+            "z": 33.14530083396793
+          },
+          "target": {
+            "id": "e:6:0",
+            "x": 180.54011355990096,
+            "z": 23.617199055849245,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 14,
+          "upgrade": "double"
+        },
+        {
+          "tier": 6,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 3025,
+          "seconds": 50.416666666666664,
+          "hp": 365,
+          "totalDamage": 0,
+          "remaining": 0,
+          "position": {
+            "x": 6.633359910115967,
+            "z": 112.77478924277509
+          },
+          "target": {
+            "id": "e:7:0",
+            "x": -1.6442414215666021,
+            "z": 106.14932258086505,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 16,
+          "upgrade": "siphon"
+        }
+      ],
+      "deaths": 0,
+      "kills": 132,
+      "portalWins": 6,
+      "gameSeconds": 286.1500000000684,
+      "level": 16,
+      "wallMs": 2361.7577
+    },
+    {
+      "seed": 19320422,
+      "classId": "harvester",
+      "passed": true,
+      "records": [
+        {
+          "tier": 1,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 2308,
+          "seconds": 38.46666666666667,
+          "hp": 185,
+          "totalDamage": 0,
+          "remaining": 0,
+          "position": {
+            "x": 1.3658672907782665,
+            "z": 68.79617012268879
+          },
+          "target": {
+            "id": "e:4:0",
+            "x": -2.8856847829323278,
+            "z": 70.78984292891933,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 3,
+          "upgrade": "siphon"
+        },
+        {
+          "tier": 2,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 2925,
+          "seconds": 48.75,
+          "hp": 209.19279999999998,
+          "totalDamage": 31.058280000000025,
+          "remaining": 0,
+          "position": {
+            "x": 58.78512486316501,
+            "z": 2.6964373443974514
+          },
+          "target": {
+            "id": "e:4:0",
+            "x": 55.26051604147457,
+            "z": 1.5911533791594674,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 5,
+          "upgrade": "cleave"
+        },
+        {
+          "tier": 3,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 4571,
+          "seconds": 76.18333333333334,
+          "hp": 279,
+          "totalDamage": 40.694139199999995,
+          "remaining": 0,
+          "position": {
+            "x": 144.79885823234235,
+            "z": 33.5773291811475
+          },
+          "target": {
+            "id": "e:5:0",
+            "x": 140.11519483951747,
+            "z": 33.78148091449355,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 8,
+          "upgrade": "aftershock"
+        },
+        {
+          "tier": 4,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 4651,
+          "seconds": 77.51666666666667,
+          "hp": 271.704164932,
+          "totalDamage": 113.24783506799997,
+          "remaining": 0,
+          "position": {
+            "x": -64.79175200062144,
+            "z": 27.74841858254436
+          },
+          "target": {
+            "id": "e:5:0",
+            "x": -67.18546717472029,
+            "z": 32.865409986382815,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 11,
+          "upgrade": "power"
+        },
+        {
+          "tier": 5,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 4107,
+          "seconds": 68.45,
+          "hp": 319.01418638114,
+          "totalDamage": 63.441381618859964,
+          "remaining": 0,
+          "position": {
+            "x": 169.58688295550317,
+            "z": 24.31608334098769
+          },
+          "target": {
+            "id": "e:6:0",
+            "x": 168.44561758697432,
+            "z": 26.360601256499727,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 14,
+          "upgrade": "recovery"
+        },
+        {
+          "tier": 6,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 6426,
+          "seconds": 107.1,
+          "hp": 378.01326118237,
+          "totalDamage": 164.32752563525992,
+          "remaining": 0,
+          "position": {
+            "x": 13.073204499112869,
+            "z": 112.61680732561486
+          },
+          "target": {
+            "id": "e:7:0",
+            "x": 9.833976959942529,
+            "z": 104.78065758562822,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 16,
+          "upgrade": "siphon"
+        }
+      ],
+      "deaths": 0,
+      "kills": 132,
+      "portalWins": 6,
+      "gameSeconds": 447.78333333325475,
+      "level": 16,
+      "wallMs": 2479.3484
+    },
+    {
+      "seed": 19320422,
+      "classId": "aerologist",
+      "passed": true,
+      "records": [
+        {
+          "tier": 1,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 1856,
+          "seconds": 30.933333333333334,
+          "hp": 160,
+          "totalDamage": 0,
+          "remaining": 0,
+          "position": {
+            "x": 2.280225438294738,
+            "z": 67.26455696978768
+          },
+          "target": {
+            "id": "e:4:0",
+            "x": -2.1458265379366006,
+            "z": 71.96845515065526,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 3,
+          "upgrade": "siphon"
+        },
+        {
+          "tier": 2,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 2283,
+          "seconds": 38.05,
+          "hp": 180,
+          "totalDamage": 44.74416000000002,
+          "remaining": 0,
+          "position": {
+            "x": 62.70896898870911,
+            "z": -1.6765647381226958
+          },
+          "target": {
+            "id": "e:4:0",
+            "x": 56.885647738569695,
+            "z": 0.5055597076333948,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 5,
+          "upgrade": "pellets"
+        },
+        {
+          "tier": 3,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 3135,
+          "seconds": 52.25,
+          "hp": 244,
+          "totalDamage": 82.98892800000002,
+          "remaining": 0,
+          "position": {
+            "x": 147.7203419741819,
+            "z": 40.82404044383255
+          },
+          "target": {
+            "id": "e:5:0",
+            "x": 142.29246451610138,
+            "z": 34.9721808955638,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 8,
+          "upgrade": "linger"
+        },
+        {
+          "tier": 4,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 4271,
+          "seconds": 71.18333333333334,
+          "hp": 286,
+          "totalDamage": 0,
+          "remaining": 0,
+          "position": {
+            "x": -78.66523269924564,
+            "z": 29.62872792634495
+          },
+          "target": {
+            "id": "e:5:0",
+            "x": -70.10818417196363,
+            "z": 35.907251152631474,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 11,
+          "upgrade": "power"
+        },
+        {
+          "tier": 5,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 3487,
+          "seconds": 58.11666666666667,
+          "hp": 280.33111206384,
+          "totalDamage": 53.98888793615998,
+          "remaining": 0,
+          "position": {
+            "x": 171.31347824560214,
+            "z": 43.403025000139415
+          },
+          "target": {
+            "id": "e:6:0",
+            "x": 174.55336333565555,
+            "z": 38.06474068814186,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 14,
+          "upgrade": "stormEye"
+        },
+        {
+          "tier": 6,
+          "attempt": 1,
+          "phase": "reward",
+          "ticks": 3774,
+          "seconds": 62.9,
+          "hp": 351.33018686507,
+          "totalDamage": 34.669813134929996,
+          "remaining": 0,
+          "position": {
+            "x": -8.59856522903902,
+            "z": 95.25118066631727
+          },
+          "target": {
+            "id": "e:7:0",
+            "x": -4.636538265169342,
+            "z": 107.17719394314489,
+            "hp": 0,
+            "kind": "boss"
+          },
+          "level": 16,
+          "upgrade": "siphon"
+        }
+      ],
+      "deaths": 0,
+      "kills": 132,
+      "portalWins": 6,
+      "gameSeconds": 341.43333333335147,
+      "level": 16,
+      "wallMs": 2442.7696000000005
+    }
+  ]
+}
