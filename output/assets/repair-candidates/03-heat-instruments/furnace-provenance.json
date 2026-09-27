@@ -1,0 +1,98 @@
+{
+  "asset": "furnace",
+  "operation": "built-in image_gen edit",
+  "transparent_background": true,
+  "prompt": "Use case: stylized-concept. Asset type: one isolated icon for stored heat, energy recovery and the existing Stoker. Input images: Image 1 is the exact existing furnace icon and is the edit target. Preserve the current heat-container/furnace identity, complete body, fittings, materials, proportions, warm inner heat and original colors; remove the foreign image fragments identified in the audit and clean only the item boundary. Keep any glow contained within the object as in the reference. Center the complete item with about 8% transparent margin. Match the project's detailed rendered-item style. Keep its silhouette readable at 48 and 64 px on #102a2e and #eee8d8. Request a genuinely transparent background. One furnace only; no text, logo, frame, pedestal, room, second object, sparks, debris, added pipes, external fire cloud or watermark. Do not invent new game content.",
+  "reference": {
+    "path": "public/assets/furnace.webp",
+    "role": "Image 1; exact existing furnace icon, edit target",
+    "size": [
+      320,
+      284
+    ],
+    "sha256": "5eb4636aa76ec878843a488f6bf8fbae36cf2abfd4af1c0c1df673f67fbd80f1"
+  },
+  "tool_result": {
+    "output_hint": "Generated images are saved to C:\\Users\\user\\.codex\\generated_images\\01a0e4e1-06a8-76a0-b1a2-a242adf5227b as C:\\Users\\user\\.codex\\generated_images\\01a0e4e1-06a8-76a0-b1a2-a242adf5227b\\exec-8fb179bb-7515-463c-abf9-ee7d0580314b.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "returned_source_png_path": "C:\\Users\\user\\.codex\\generated_images\\01a0e4e1-06a8-76a0-b1a2-a242adf5227b\\exec-8fb179bb-7515-463c-abf9-ee7d0580314b.png"
+  },
+  "deliverables": {
+    "png": {
+      "path": "output/assets/repair-candidates/03-heat-instruments/furnace-source.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1214,
+        1295
+      ],
+      "sha256": "55dfb10e1a6bcaf17b77894a1b437ed217841ec148ab0a1d3dfe8d47f9076044"
+    },
+    "webp": {
+      "path": "output/assets/repair-candidates/03-heat-instruments/furnace.webp",
+      "format": "WebP",
+      "mode": "RGBA",
+      "size": [
+        360,
+        384
+      ],
+      "lossless": true,
+      "max_canvas_edge_px": 384,
+      "cropped": false,
+      "sha256": "0e5d3e37b3aec8c2620cb133b864852774c300fb7382a35bb63eea307726fcdc"
+    }
+  },
+  "integrity": {
+    "copied_png_sha256_matches_returned_source": true,
+    "webp_decoded_rgba_matches_full_canvas_lanczos_resize": true
+  },
+  "alpha": {
+    "has_transparency": true,
+    "has_partial_alpha": true,
+    "nonzero_alpha_pixels": 610348,
+    "partial_alpha_pixels": 610225,
+    "bbox_alpha_gt0_exclusive": [
+      0,
+      72,
+      1200,
+      1265
+    ],
+    "bbox_alpha_gte128_exclusive": [
+      275,
+      77,
+      962,
+      1159
+    ],
+    "bbox_alpha_eq255_exclusive": [
+      277,
+      129,
+      935,
+      1152
+    ],
+    "margin_fraction_alpha_gte128": {
+      "left": 0.22652388797364087,
+      "top": 0.05945945945945946,
+      "right": 0.20757825370675453,
+      "bottom": 0.10501930501930502
+    },
+    "touches_edge_alpha_gt0": true,
+    "edge_pixels_rgba_alpha1": [
+      [
+        0,
+        1235,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1237,
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "solid_silhouette_touches_edge_alpha_gte128": false
+  }
+}

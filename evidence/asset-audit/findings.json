@@ -1,0 +1,22 @@
+{
+  "scope": "All 12 public/assets/*.webp files",
+  "visual_contact_sheet": "contact-sheet-light-dark.png",
+  "measurement_file": "measurements.json",
+  "alpha_threshold": 16,
+  "component_connectivity": "8-neighbor",
+  "selection": ["cloak.webp", "rotor.webp"],
+  "findings": [
+    {"file":"cloak.webp","severity":"high","finding":"The cloak silhouette contacts the top and right canvas edges; the upper/right fabric contour is cropped.","edge_pixels":{"top":62,"right":49},"bbox_alpha_ge_16_xyxy":[26,0,320,260],"components_alpha_ge_16":1,"selected_for_repair":true},
+    {"file":"coil.webp","severity":"medium","finding":"A detached fragment is visible below the coil; alpha also contacts the bottom edge.","edge_pixels":{"top":1,"bottom":60},"components_alpha_ge_16":3,"component_areas_px":[45147,857,1],"selected_for_repair":false},
+    {"file":"fork.webp","severity":"low","finding":"Main instrument silhouette is intact in the light/dark contact sheet; high-zoom raw-view edge colors were not counted as a confirmed cutout defect.","edge_pixels":{"bottom":4},"components_alpha_ge_16":1,"selected_for_repair":false},
+    {"file":"furnace.webp","severity":"medium","finding":"A separate fragment is visible below/right of the furnace; alpha touches the bottom edge.","edge_pixels":{"bottom":58},"components_alpha_ge_16":2,"component_areas_px":[30861,1180],"selected_for_repair":false},
+    {"file":"gauge.webp","severity":"none","finding":"No obvious crop or detached component in the light/dark visual review; alpha bbox remains clear of all edges.","edge_pixels":{},"components_alpha_ge_16":1,"selected_for_repair":false},
+    {"file":"orb.webp","severity":"low","finding":"The main object appears intact; five thresholded pixels touch the bottom edge and a 5 px component is present.","edge_pixels":{"bottom":5},"components_alpha_ge_16":2,"component_areas_px":[44850,5],"selected_for_repair":false},
+    {"file":"prism.webp","severity":"medium","finding":"Several small detached shards are visible below the main prism; alpha touches the bottom edge.","edge_pixels":{"bottom":53},"components_alpha_ge_16":4,"component_areas_px":[24808,250,114,29],"selected_for_repair":false},
+    {"file":"rotor.webp","severity":"high","finding":"The rotor is cropped at the top and left edges, with an extra detached fragment to the left.","edge_pixels":{"top":59,"left":47},"bbox_alpha_ge_16_xyxy":[0,0,300,272],"components_alpha_ge_16":2,"component_areas_px":[26008,579],"selected_for_repair":true},
+    {"file":"seed.webp","severity":"medium","finding":"The glass housing contacts the top edge; silhouette has almost no top clearance.","edge_pixels":{"top":93},"components_alpha_ge_16":3,"component_areas_px":[45736,2,1],"selected_for_repair":false},
+    {"file":"tonic.webp","severity":"high","finding":"Several detached chips appear below the tonic; alpha contacts both top and bottom edges.","edge_pixels":{"top":9,"bottom":90},"components_alpha_ge_16":4,"component_areas_px":[21050,474,267,169],"selected_for_repair":false},
+    {"file":"vest.webp","severity":"low","finding":"Main shell silhouette is intact and clear of the canvas edges. Raw-view colored edge pixels were not classified as a confirmed defect without a corresponding visible cutout on the two-background review.","edge_pixels":{},"components_alpha_ge_16":1,"selected_for_repair":false},
+    {"file":"void.webp","severity":"medium","finding":"The upper silhouette contacts the top edge; item has no top clearance.","edge_pixels":{"top":53},"components_alpha_ge_16":1,"selected_for_repair":false}
+  ]
+}

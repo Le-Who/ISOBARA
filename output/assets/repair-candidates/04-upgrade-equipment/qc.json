@@ -1,0 +1,52 @@
+{
+  "source_png": {
+    "size": [
+      1230,
+      1278
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox_nonzero": [
+      0,
+      21,
+      1167,
+      1238
+    ],
+    "visible_bbox_alpha_gt8": [
+      285,
+      54,
+      952,
+      1171
+    ],
+    "edge_touch_nonzero_alpha": {
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 7
+    },
+    "edge_max_alpha": {
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 1
+    }
+  },
+  "webp": {
+    "size": [
+      370,
+      384
+    ],
+    "alpha": true,
+    "lossless_pixel_match_to_resized_png": true
+  },
+  "visual_48_64": {
+    "48px_dark_#102a2e": "pass — silhouette and amber core readable",
+    "48px_light_#eee8d8": "pass — silhouette and amber core readable",
+    "64px_dark_#102a2e": "pass — silhouette and brass facets readable",
+    "64px_light_#eee8d8": "pass — silhouette and brass facets readable"
+  },
+  "foreign_fragments_below_item": "none visible"
+}

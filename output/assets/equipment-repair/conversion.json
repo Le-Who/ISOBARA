@@ -1,0 +1,30 @@
+{
+  "cloak": {
+    "source": "E:\\Projects\\ISOBARA\\output\\assets\\equipment-repair\\cloak-repair-source.png",
+    "candidate": "E:\\Projects\\ISOBARA\\output\\assets\\equipment-repair\\cloak-candidate.webp",
+    "source_dimensions": [
+      1225,
+      1284
+    ],
+    "candidate_dimensions": [
+      366,
+      384
+    ],
+    "webp_lossless": true,
+    "resized_whole_canvas_without_crop": true
+  },
+  "rotor": {
+    "source": "E:\\Projects\\ISOBARA\\output\\assets\\equipment-repair\\rotor-repair-source.png",
+    "candidate": "E:\\Projects\\ISOBARA\\output\\assets\\equipment-repair\\rotor-candidate.webp",
+    "source_dimensions": [
+      1254,
+      1254
+    ],
+    "candidate_dimensions": [
+      384,
+      384
+    ],
+    "webp_lossless": true,
+    "resized_whole_canvas_without_crop": true
+  }
+}

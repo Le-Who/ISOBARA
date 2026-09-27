@@ -1,0 +1,12 @@
+{
+  "asset": "prism",
+  "tool": "built-in image_gen",
+  "prompt": "Use case: stylized-concept\nAsset type: one isolated icon for the existing piercing/refraction upgrade.\nPrimary request: Edit Image 1, the exact existing prism icon. Remove the foreign image fragments beneath the item and restore the clean complete silhouette.\nInput images: Image 1: exact existing prism icon; edit target.\nScene/backdrop: genuinely transparent background.\nSubject: exactly one glowing amber faceted prism enclosed in its existing brass frame.\nStyle/medium: preserve the reference's detailed rendered-item finish.\nComposition/framing: center the complete prism with about 8% transparent margin on every side; do not crop any part of the frame or silhouette.\nLighting/mood: preserve the warm internal amber glow and reference lighting.\nColor palette: preserve the existing amber, orange, dark metal, and brass palette.\nMaterials/textures: preserve the current optical materials, facets, brass frame, outline, proportions, and surface detail.\nConstraints: preserve the prism's present identity, outline, facets, materials, proportions, palette, and the entire silhouette; remove only the foreign fragments beneath it; no redesign and no beam. Keep the main outline and facets readable at 48 and 64 px on both #102a2e and #eee8d8.\nAvoid: words, logo, border, pedestal, scene, extra crystal, detached light rays, debris, watermark, cropping, or any second item.",
+  "reference": {
+    "role": "edit target",
+    "path": "E:\\Projects\\ISOBARA\\public\\assets\\prism.webp"
+  },
+  "returned_path": "C:\\Users\\user\\.codex\\generated_images\\01a0e4e3-0a6b-7c21-8879-4fceb0dae8db\\exec-2a324063-96db-45be-b399-fdb0c6c881c4.png",
+  "output_hint": "Generated images are saved to C:\\Users\\user\\.codex\\generated_images\\01a0e4e3-0a6b-7c21-8879-4fceb0dae8db as C:\\Users\\user\\.codex\\generated_images\\01a0e4e3-0a6b-7c21-8879-4fceb0dae8db\\exec-2a324063-96db-45be-b399-fdb0c6c881c4.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+  "source_sha256": "a73593352f664f88f663ee4cc0f3ba773d60622af7490fb8818e645ba91284c4"
+}

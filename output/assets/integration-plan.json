@@ -1,0 +1,52 @@
+{
+  "status": "collecting-candidates",
+  "integration": "single batch followed by one final game validation phase",
+  "assets": [
+    {
+      "id": "cloak",
+      "candidate": "output/assets/equipment-repair/cloak-candidate.webp",
+      "destination": "public/assets/cloak.webp"
+    },
+    {
+      "id": "rotor",
+      "candidate": "output/assets/equipment-repair/rotor-candidate.webp",
+      "destination": "public/assets/rotor.webp"
+    },
+    {
+      "id": "coil",
+      "candidate": "output/assets/repair-candidates/02-electrical-tools/coil.webp",
+      "destination": "public/assets/coil.webp"
+    },
+    {
+      "id": "furnace",
+      "candidate": "output/assets/repair-candidates/03-heat-instruments/furnace.webp",
+      "destination": "public/assets/furnace.webp"
+    },
+    {
+      "id": "prism",
+      "candidate": "output/assets/repair-candidates/04-upgrade-equipment/prism.webp",
+      "destination": "public/assets/prism.webp"
+    },
+    {
+      "id": "tonic",
+      "candidate": "output/assets/repair-candidates/05-repair-relics/tonic.webp",
+      "destination": "public/assets/tonic.webp"
+    },
+    {
+      "id": "seed",
+      "candidate": "output/assets/repair-candidates/06-garden-forecast/seed.webp",
+      "destination": "public/assets/seed.webp"
+    },
+    {
+      "id": "void",
+      "candidate": "output/assets/repair-candidates/07-void-repair/void.webp",
+      "destination": "public/assets/void.webp"
+    }
+  ],
+  "retain_original": [
+    "fork",
+    "gauge",
+    "orb",
+    "vest"
+  ]
+}

@@ -1,0 +1,744 @@
+{
+  "source_directory": "public/assets",
+  "analysis_threshold_alpha_ge": 16,
+  "component_connectivity": "8-neighbor",
+  "files_audited": 12,
+  "records": [
+    {
+      "file": "cloak.webp",
+      "dimensions": [
+        320,
+        285
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 42.245,
+        "partial_1_254_pct": 57.738,
+        "opaque_255_pct": 0.018
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        26,
+        0,
+        320,
+        260
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        27,
+        0,
+        320,
+        258
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 26,
+        "top": 0,
+        "right": 0,
+        "bottom": 25
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 62,
+        "right": 49,
+        "bottom": 0,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 1,
+        "largest": {
+          "area_px": 45820,
+          "bbox_xyxy": [
+            26,
+            0,
+            320,
+            260
+          ]
+        },
+        "next_components": []
+      }
+    },
+    {
+      "file": "coil.webp",
+      "dimensions": [
+        320,
+        284
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 37.607,
+        "partial_1_254_pct": 62.344,
+        "opaque_255_pct": 0.05
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        33,
+        0,
+        294,
+        284
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        33,
+        12,
+        294,
+        284
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 33,
+        "top": 0,
+        "right": 26,
+        "bottom": 0
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 1,
+        "right": 0,
+        "bottom": 60,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 3,
+        "largest": {
+          "area_px": 45147,
+          "bbox_xyxy": [
+            33,
+            11,
+            294,
+            253
+          ]
+        },
+        "next_components": [
+          {
+            "area_px": 857,
+            "bbox_xyxy": [
+              156,
+              267,
+              216,
+              284
+            ]
+          },
+          {
+            "area_px": 1,
+            "bbox_xyxy": [
+              98,
+              0,
+              99,
+              1
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "fork.webp",
+      "dimensions": [
+        320,
+        284
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 73.632,
+        "partial_1_254_pct": 26.358,
+        "opaque_255_pct": 0.01
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        28,
+        15,
+        298,
+        284
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        28,
+        16,
+        297,
+        284
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 28,
+        "top": 15,
+        "right": 22,
+        "bottom": 0
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 0,
+        "right": 0,
+        "bottom": 4,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 1,
+        "largest": {
+          "area_px": 17766,
+          "bbox_xyxy": [
+            28,
+            15,
+            298,
+            284
+          ]
+        },
+        "next_components": []
+      }
+    },
+    {
+      "file": "furnace.webp",
+      "dimensions": [
+        320,
+        284
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 60.614,
+        "partial_1_254_pct": 39.344,
+        "opaque_255_pct": 0.042
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        89,
+        8,
+        282,
+        284
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        90,
+        9,
+        281,
+        284
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 89,
+        "top": 8,
+        "right": 38,
+        "bottom": 0
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 0,
+        "right": 0,
+        "bottom": 58,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 2,
+        "largest": {
+          "area_px": 30861,
+          "bbox_xyxy": [
+            89,
+            8,
+            249,
+            254
+          ]
+        },
+        "next_components": [
+          {
+            "area_px": 1180,
+            "bbox_xyxy": [
+              216,
+              257,
+              282,
+              284
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "gauge.webp",
+      "dimensions": [
+        320,
+        284
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 57.75,
+        "partial_1_254_pct": 42.232,
+        "opaque_255_pct": 0.019
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        56,
+        18,
+        262,
+        272
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        57,
+        19,
+        262,
+        271
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 56,
+        "top": 18,
+        "right": 58,
+        "bottom": 12
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 1,
+        "largest": {
+          "area_px": 32971,
+          "bbox_xyxy": [
+            56,
+            18,
+            262,
+            272
+          ]
+        },
+        "next_components": []
+      }
+    },
+    {
+      "file": "orb.webp",
+      "dimensions": [
+        320,
+        284
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 45.158,
+        "partial_1_254_pct": 54.811,
+        "opaque_255_pct": 0.031
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        35,
+        13,
+        288,
+        284
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        36,
+        13,
+        287,
+        274
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 35,
+        "top": 13,
+        "right": 32,
+        "bottom": 0
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 0,
+        "right": 0,
+        "bottom": 5,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 2,
+        "largest": {
+          "area_px": 44850,
+          "bbox_xyxy": [
+            35,
+            13,
+            288,
+            275
+          ]
+        },
+        "next_components": [
+          {
+            "area_px": 5,
+            "bbox_xyxy": [
+              176,
+              283,
+              181,
+              284
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "prism.webp",
+      "dimensions": [
+        320,
+        284
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 65.548,
+        "partial_1_254_pct": 34.45,
+        "opaque_255_pct": 0.002
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        85,
+        1,
+        236,
+        284
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        86,
+        2,
+        235,
+        284
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 85,
+        "top": 1,
+        "right": 84,
+        "bottom": 0
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 0,
+        "right": 0,
+        "bottom": 53,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 4,
+        "largest": {
+          "area_px": 24808,
+          "bbox_xyxy": [
+            85,
+            1,
+            236,
+            257
+          ]
+        },
+        "next_components": [
+          {
+            "area_px": 250,
+            "bbox_xyxy": [
+              144,
+              268,
+              172,
+              284
+            ]
+          },
+          {
+            "area_px": 114,
+            "bbox_xyxy": [
+              208,
+              273,
+              229,
+              284
+            ]
+          },
+          {
+            "area_px": 29,
+            "bbox_xyxy": [
+              109,
+              279,
+              119,
+              284
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "rotor.webp",
+      "dimensions": [
+        320,
+        285
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 64.34,
+        "partial_1_254_pct": 35.598,
+        "opaque_255_pct": 0.062
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        0,
+        0,
+        300,
+        272
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        0,
+        0,
+        299,
+        271
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 0,
+        "top": 0,
+        "right": 20,
+        "bottom": 13
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 59,
+        "right": 0,
+        "bottom": 0,
+        "left": 47
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 2,
+        "largest": {
+          "area_px": 26008,
+          "bbox_xyxy": [
+            22,
+            0,
+            300,
+            267
+          ]
+        },
+        "next_components": [
+          {
+            "area_px": 579,
+            "bbox_xyxy": [
+              0,
+              212,
+              21,
+              272
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "seed.webp",
+      "dimensions": [
+        320,
+        285
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 43.086,
+        "partial_1_254_pct": 56.866,
+        "opaque_255_pct": 0.048
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        61,
+        0,
+        276,
+        273
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        62,
+        0,
+        275,
+        272
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 61,
+        "top": 0,
+        "right": 44,
+        "bottom": 12
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 93,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 3,
+        "largest": {
+          "area_px": 45736,
+          "bbox_xyxy": [
+            61,
+            0,
+            276,
+            273
+          ]
+        },
+        "next_components": [
+          {
+            "area_px": 2,
+            "bbox_xyxy": [
+              109,
+              150,
+              110,
+              152
+            ]
+          },
+          {
+            "area_px": 1,
+            "bbox_xyxy": [
+              114,
+              135,
+              115,
+              136
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "tonic.webp",
+      "dimensions": [
+        320,
+        284
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 68.867,
+        "partial_1_254_pct": 31.126,
+        "opaque_255_pct": 0.008
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        84,
+        0,
+        257,
+        284
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        85,
+        0,
+        256,
+        284
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 84,
+        "top": 0,
+        "right": 63,
+        "bottom": 0
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 9,
+        "right": 0,
+        "bottom": 90,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 4,
+        "largest": {
+          "area_px": 21050,
+          "bbox_xyxy": [
+            98,
+            0,
+            223,
+            257
+          ]
+        },
+        "next_components": [
+          {
+            "area_px": 474,
+            "bbox_xyxy": [
+              215,
+              268,
+              257,
+              284
+            ]
+          },
+          {
+            "area_px": 267,
+            "bbox_xyxy": [
+              84,
+              270,
+              115,
+              284
+            ]
+          },
+          {
+            "area_px": 169,
+            "bbox_xyxy": [
+              160,
+              270,
+              180,
+              284
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "vest.webp",
+      "dimensions": [
+        320,
+        284
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 41.623,
+        "partial_1_254_pct": 58.347,
+        "opaque_255_pct": 0.03
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        20,
+        15,
+        285,
+        270
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        21,
+        16,
+        284,
+        269
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 20,
+        "top": 15,
+        "right": 35,
+        "bottom": 14
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 1,
+        "largest": {
+          "area_px": 48410,
+          "bbox_xyxy": [
+            20,
+            15,
+            285,
+            270
+          ]
+        },
+        "next_components": []
+      }
+    },
+    {
+      "file": "void.webp",
+      "dimensions": [
+        320,
+        285
+      ],
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "transparent_0_pct": 50.61,
+        "partial_1_254_pct": 49.378,
+        "opaque_255_pct": 0.012
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        58,
+        0,
+        280,
+        268
+      ],
+      "bbox_alpha_ge_128_xyxy": [
+        58,
+        0,
+        279,
+        267
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 58,
+        "top": 0,
+        "right": 40,
+        "bottom": 17
+      },
+      "nontransparent_edge_pixels_alpha_ge_16": {
+        "top": 53,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "connected_components_8_neighbor_alpha_ge_16": {
+        "count": 1,
+        "largest": {
+          "area_px": 38974,
+          "bbox_xyxy": [
+            58,
+            0,
+            280,
+            268
+          ]
+        },
+        "next_components": []
+      }
+    }
+  ]
+}

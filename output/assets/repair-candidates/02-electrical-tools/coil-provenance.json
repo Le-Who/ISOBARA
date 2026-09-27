@@ -1,0 +1,149 @@
+{
+  "task": "02-electrical-tools",
+  "asset": "coil",
+  "mode": "edit",
+  "tool": "built-in image_gen",
+  "model_id": null,
+  "model_id_note": "The built-in image_gen interface does not expose an image model ID.",
+  "transparent_background_requested": true,
+  "input_reference": "public/assets/coil.webp",
+  "generator_output_hint": "C:\\Users\\user\\.codex\\generated_images\\01a0e4d9-20bf-7cd3-8adf-3419e7787292\\exec-e5c866b4-3e7b-4ba6-b703-94e68643efa9.png",
+  "generator_png": "output/assets/repair-candidates/02-electrical-tools/coil-source.png",
+  "candidate_webp": "output/assets/repair-candidates/02-electrical-tools/coil.webp",
+  "prompt": "Use case: stylized-concept. Asset type: one isolated icon for the Lineman's electrical instrument and signal upgrades. Edit Image 1, the exact existing coil icon. Preserve its existing coil/device identity, full design, proportions, visible winding or electrical details, materials and palette; remove the foreign image fragments identified by audit and restore a clean item boundary. Do not replace or redesign the coil. Center the whole coil with about 8% transparent space around its silhouette. Match the project's detailed rendered-item finish. Keep the shape and key electrical detail readable at 48 and 64 px on #102a2e and #eee8d8. Request a genuinely transparent background. Show exactly one coil, with no text, logo, border, pedestal, background scene, extra device, extra loose wire not present in the reference, debris, effects cloud or watermark.",
+  "generator_png_sha256": "5b9bd8e2ed5a4278beed41e070c36d402b5db546b8d953b06536653d9dc346d2",
+  "candidate_webp_sha256": "c5081d426764a331a174be72d84de84de62bdb86f101eb975ca89065a766ebea",
+  "generator_png_inspection": {
+    "format": "PNG",
+    "mode": "RGBA",
+    "size_px": [
+      1331,
+      1181
+    ],
+    "alpha_channel": true,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox_xyxy": [
+      110,
+      54,
+      1295,
+      1171
+    ],
+    "margins": {
+      "left_px": 110,
+      "top_px": 54,
+      "right_px": 36,
+      "bottom_px": 10,
+      "left_pct": 8.26,
+      "top_pct": 4.57,
+      "right_pct": 2.7,
+      "bottom_pct": 0.85
+    },
+    "touches_canvas_edges": {
+      "left": false,
+      "top": false,
+      "right": false,
+      "bottom": false
+    }
+  },
+  "candidate_webp_inspection": {
+    "format": "WEBP",
+    "mode": "RGBA",
+    "size_px": [
+      352,
+      312
+    ],
+    "alpha_channel": true,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox_xyxy": [
+      42,
+      33,
+      310,
+      279
+    ],
+    "margins": {
+      "left_px": 42,
+      "top_px": 33,
+      "right_px": 42,
+      "bottom_px": 33,
+      "left_pct": 11.93,
+      "top_pct": 10.58,
+      "right_pct": 11.93,
+      "bottom_pct": 10.58
+    },
+    "touches_canvas_edges": {
+      "left": false,
+      "top": false,
+      "right": false,
+      "bottom": false
+    }
+  },
+  "canvas_adjustment": {
+    "description": "Crop only fully transparent source canvas around the alpha silhouette, proportionally downscale with Lanczos using premultiplied alpha, then center the resulting visible alpha bounds on the preserved full output canvas. No painted pixels or artistic edits.",
+    "target_canvas_px": [
+      352,
+      312
+    ],
+    "fit_fraction": 0.84,
+    "scaled_subject_px": [
+      278,
+      262
+    ],
+    "resized_alpha_bbox_xyxy": [
+      0,
+      0,
+      268,
+      246
+    ],
+    "placement_xy": [
+      42,
+      33
+    ],
+    "resampling": "Lanczos with premultiplied alpha",
+    "webp": "lossless"
+  },
+  "previews": {
+    "coil-48-dark.png": {
+      "path": "output/assets/repair-candidates/02-electrical-tools/previews/coil-48-dark.png",
+      "size_px": [
+        48,
+        48
+      ],
+      "background": "#102a2e",
+      "bytes": 3477
+    },
+    "coil-48-light.png": {
+      "path": "output/assets/repair-candidates/02-electrical-tools/previews/coil-48-light.png",
+      "size_px": [
+        48,
+        48
+      ],
+      "background": "#eee8d8",
+      "bytes": 3713
+    },
+    "coil-64-dark.png": {
+      "path": "output/assets/repair-candidates/02-electrical-tools/previews/coil-64-dark.png",
+      "size_px": [
+        64,
+        64
+      ],
+      "background": "#102a2e",
+      "bytes": 5716
+    },
+    "coil-64-light.png": {
+      "path": "output/assets/repair-candidates/02-electrical-tools/previews/coil-64-light.png",
+      "size_px": [
+        64,
+        64
+      ],
+      "background": "#eee8d8",
+      "bytes": 6023
+    }
+  },
+  "rejected_first_copy": "coil-source-rejected-foreign-rotor.png (wrong shared generated_images file; excluded from coil candidate/QC)"
+}

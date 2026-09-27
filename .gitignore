@@ -8,3 +8,6 @@ dev-dist/
 !.env.example
 .DS_Store
 Thumbs.db
+/scratch/performance-lab/
+__pycache__/
+*.py[cod]

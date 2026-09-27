@@ -1,0 +1,212 @@
+{
+  "threshold_alpha_ge": 16,
+  "component_connectivity": "8-neighbor",
+  "files": [
+    {
+      "file": "cloak-candidate.webp",
+      "size": [
+        366,
+        384
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_percent": {
+        "fully_transparent": 50.639,
+        "partially_transparent": 48.654,
+        "fully_opaque": 0.707
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        14,
+        15,
+        355,
+        365
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 14,
+        "top": 15,
+        "right": 11,
+        "bottom": 19
+      },
+      "edge_pixels_alpha_ge_16": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "components_8_neighbor_alpha_ge_16": {
+        "count": 1,
+        "largest": {
+          "area_px": 66592,
+          "bbox_xyxy": [
+            14,
+            15,
+            355,
+            365
+          ]
+        },
+        "next_components": []
+      },
+      "partial_bright_chroma_pixels": 360,
+      "partial_bright_red_or_green_pixels": 169
+    },
+    {
+      "file": "cloak-repair-source.png",
+      "size": [
+        1225,
+        1284
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_percent": {
+        "fully_transparent": 50.852,
+        "partially_transparent": 49.143,
+        "fully_opaque": 0.005
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        48,
+        50,
+        1187,
+        1219
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 48,
+        "top": 50,
+        "right": 38,
+        "bottom": 65
+      },
+      "edge_pixels_alpha_ge_16": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "components_8_neighbor_alpha_ge_16": {
+        "count": 2,
+        "largest": {
+          "area_px": 739314,
+          "bbox_xyxy": [
+            48,
+            50,
+            1187,
+            1219
+          ]
+        },
+        "next_components": [
+          {
+            "area_px": 1,
+            "bbox_xyxy": [
+              475,
+              804,
+              476,
+              805
+            ]
+          }
+        ]
+      },
+      "partial_bright_chroma_pixels": 7558,
+      "partial_bright_red_or_green_pixels": 2765
+    },
+    {
+      "file": "rotor-candidate.webp",
+      "size": [
+        384,
+        384
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_percent": {
+        "fully_transparent": 73.557,
+        "partially_transparent": 25.928,
+        "fully_opaque": 0.515
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        27,
+        19,
+        350,
+        372
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 27,
+        "top": 19,
+        "right": 34,
+        "bottom": 12
+      },
+      "edge_pixels_alpha_ge_16": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "components_8_neighbor_alpha_ge_16": {
+        "count": 1,
+        "largest": {
+          "area_px": 37412,
+          "bbox_xyxy": [
+            27,
+            19,
+            350,
+            372
+          ]
+        },
+        "next_components": []
+      },
+      "partial_bright_chroma_pixels": 659,
+      "partial_bright_red_or_green_pixels": 184
+    },
+    {
+      "file": "rotor-repair-source.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_percent": {
+        "fully_transparent": 74.014,
+        "partially_transparent": 25.959,
+        "fully_opaque": 0.027
+      },
+      "bbox_alpha_ge_16_xyxy": [
+        87,
+        63,
+        1141,
+        1215
+      ],
+      "margins_alpha_ge_16_px": {
+        "left": 87,
+        "top": 63,
+        "right": 113,
+        "bottom": 39
+      },
+      "edge_pixels_alpha_ge_16": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "components_8_neighbor_alpha_ge_16": {
+        "count": 1,
+        "largest": {
+          "area_px": 395444,
+          "bbox_xyxy": [
+            87,
+            63,
+            1141,
+            1215
+          ]
+        },
+        "next_components": []
+      },
+      "partial_bright_chroma_pixels": 12598,
+      "partial_bright_red_or_green_pixels": 3966
+    }
+  ]
+}

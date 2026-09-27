@@ -1,0 +1,12 @@
+{
+  "task": "02-electrical-tools",
+  "phase": "coil-candidate-qc-written",
+  "coil": "candidate ready for coordinator review",
+  "generator_png": "output/assets/repair-candidates/02-electrical-tools/coil-source.png",
+  "candidate_webp": "output/assets/repair-candidates/02-electrical-tools/coil.webp",
+  "provenance": "output/assets/repair-candidates/02-electrical-tools/coil-provenance.json",
+  "qc": "output/assets/repair-candidates/02-electrical-tools/coil-qc.md",
+  "rejected_png": "output/assets/repair-candidates/02-electrical-tools/coil-source-rejected-foreign-rotor.png",
+  "fork": "not re-audited per coordinator clarification; original audit retained",
+  "updated_utc": "2026-09-27T21:59:51.810031+00:00"
+}

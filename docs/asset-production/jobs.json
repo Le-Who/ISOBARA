@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "project": "ISOBARA",
+  "coordination_contract": "docs/PRODUCTION_RUN_RU.md",
+  "agent_parameters": {
+    "model": "gpt-6-luna",
+    "reasoning_effort": "max",
+    "image_tool": "built-in image_gen",
+    "image_generation_model_id": null,
+    "image_generation_model_note": "The built-in tool does not expose or select an image-model ID."
+  },
+  "slots": {
+    "maximum_concurrent_agents": 3,
+    "performance": 1,
+    "art": 2,
+    "coordination": "Manual queue; launch or advance a job only when its exclusive owner and art slot are free."
+  },
+  "statuses": [
+    "queued",
+    "auditing",
+    "generating",
+    "qc",
+    "accepted",
+    "rejected",
+    "blocked"
+  ],
+  "generation_rules": {
+    "one_subject_per_imagegen_call": true,
+    "transparent_background": true,
+    "edit_local_reference_after_view_image": true,
+    "no_sprite_sheets_or_multi_object_canvases": true,
+    "no_magenta_or_sheet_extraction": true,
+    "regenerate_only_with_documented_defect": true,
+    "integration_owner": "coordinator",
+    "do_not_modify": [
+      "public/assets",
+      "src",
+      "dist",
+      "ASSETS.md",
+      "shared manifests"
+    ]
+  },
+  "asset_status": {
+    "cloak.webp": {
+      "owner": "01-equipment-audit",
+      "status": "accepted",
+      "finding": "Silhouette clipped; repair owned by the active equipment_audit task."
+    },
+    "rotor.webp": {
+      "owner": "01-equipment-audit",
+      "status": "accepted",
+      "finding": "Silhouette clipped; repair owned by the active equipment_audit task."
+    },
+    "coil.webp": {
+      "owner": "02-electrical-tools",
+      "status": "accepted",
+      "finding": "Foreign image fragments visible in audit."
+    },
+    "fork.webp": {
+      "owner": "02-electrical-tools",
+      "status": "accepted",
+      "finding": "No confirmed visual defect; accept if image and alpha QC pass.",
+      "acceptance": "Original retained after central visual audit; no regeneration or repeated agent audit needed."
+    },
+    "furnace.webp": {
+      "owner": "03-heat-instruments",
+      "status": "accepted",
+      "finding": "Foreign image fragments visible in audit."
+    },
+    "gauge.webp": {
+      "owner": "03-heat-instruments",
+      "status": "accepted",
+      "finding": "No confirmed visual defect; accept if image and alpha QC pass.",
+      "acceptance": "Original retained after central visual audit; no regeneration or repeated agent audit needed."
+    },
+    "prism.webp": {
+      "owner": "04-upgrade-equipment",
+      "status": "generating",
+      "finding": "Foreign image fragments visible in audit."
+    },
+    "vest.webp": {
+      "owner": "04-upgrade-equipment",
+      "status": "accepted",
+      "finding": "No confirmed visual defect; accept if image and alpha QC pass.",
+      "acceptance": "Original retained after central visual audit; no regeneration or repeated agent audit needed."
+    },
+    "tonic.webp": {
+      "owner": "05-repair-relics",
+      "status": "generating",
+      "finding": "Foreign image fragments visible in audit."
+    },
+    "orb.webp": {
+      "owner": "05-repair-relics",
+      "status": "accepted",
+      "finding": "No confirmed visual defect; accept if image and alpha QC pass.",
+      "acceptance": "Original retained after central visual audit; no regeneration or repeated agent audit needed."
+    },
+    "seed.webp": {
+      "owner": "06-garden-forecast",
+      "status": "queued",
+      "finding": "Top of silhouette clipped in audit."
+    },
+    "void.webp": {
+      "owner": "07-void-repair",
+      "status": "queued",
+      "finding": "Close visual inspection confirms clipped upper metal cage; alpha>=16 touches top on 53 pixels."
+    }
+  },
+  "jobs": [
+    {
+      "id": "01-equipment-audit",
+      "owner": "equipment_audit",
+      "status": "accepted",
+      "brief": "briefs/01-equipment-audit.md",
+      "assets": [
+        "cloak.webp",
+        "rotor.webp"
+      ],
+      "generation_targets": [
+        "cloak.webp",
+        "rotor.webp"
+      ],
+      "output_directory": "output/assets/equipment-repair",
+      "calls": [
+        {
+          "asset": "cloak.webp",
+          "mode": "edit",
+          "target_reference": "public/assets/cloak.webp",
+          "prompt": "Use case: stylized-concept. Asset type: one isolated icon for the existing dash and speed-upgrade cloak. Edit Image 1, the exact existing cloak icon. Keep its present garment identity, broad pale worn panels, muted teal edging, folds and existing clasp or fittings as shown; repair the clipped silhouette only. Show the complete cloak centered, with every tip and top detail inside the canvas and about 8% clear transparent margin. Match the project's detailed rendered item style and preserve the reference materials and palette. Make the whole cloak readable at 48 and 64 px on #102a2e and #eee8d8. Request a genuinely transparent background. One item only; no text, logo, frame, pedestal, scene, extra cloth, extra accessories, debris, shadow cloud or watermark. Do not redesign the item or invent lore."
+        },
+        {
+          "asset": "rotor.webp",
+          "mode": "edit",
+          "target_reference": "public/assets/rotor.webp",
+          "prompt": "Use case: stylized-concept. Asset type: one isolated icon for the existing Aerologist instrument and wind-boss marker. Edit Image 1, the exact existing rotor icon. Preserve the rotor's current recognizable construction, proportions, materials, colors and details; repair the clipped outer silhouette only. Show one complete rotor centered, including all existing blades or outer parts, with about 8% clear transparent margin. Match the project's detailed rendered item style and the reference's surface treatment. Keep its main silhouette legible at 48 and 64 px against #102a2e and #eee8d8. Request a genuinely transparent background. One item only; no text, logo, frame, pedestal, scene, extra blades, extra device, detached debris, glow cloud or watermark. Do not redesign it or invent lore."
+        }
+      ],
+      "runtime_agent": "equipment_audit",
+      "production_assets": [
+        "cloak.webp",
+        "rotor.webp"
+      ],
+      "control_assets_already_audited": []
+    },
+    {
+      "id": "02-electrical-tools",
+      "owner": "asset-producer-02",
+      "status": "accepted",
+      "brief": "briefs/02-electrical-tools.md",
+      "assets": [
+        "coil.webp",
+        "fork.webp"
+      ],
+      "generation_targets": [
+        "coil.webp"
+      ],
+      "output_directory": "output/assets/repair-candidates/02-electrical-tools",
+      "calls": [
+        {
+          "asset": "coil.webp",
+          "mode": "edit",
+          "target_reference": "public/assets/coil.webp",
+          "prompt": "Use case: stylized-concept. Asset type: one isolated icon for the Lineman's electrical instrument and signal upgrades. Edit Image 1, the exact existing coil icon. Preserve its existing coil/device identity, full design, proportions, visible winding or electrical details, materials and palette; remove the foreign image fragments identified by audit and restore a clean item boundary. Do not replace or redesign the coil. Center the whole coil with about 8% transparent space around its silhouette. Match the project's detailed rendered-item finish. Keep the shape and key electrical detail readable at 48 and 64 px on #102a2e and #eee8d8. Request a genuinely transparent background. Show exactly one coil, with no text, logo, border, pedestal, background scene, extra device, extra loose wire not present in the reference, debris, effects cloud or watermark."
+        }
+      ],
+      "runtime_agent": "asset_producer_02",
+      "production_assets": [
+        "coil.webp"
+      ],
+      "control_assets_already_audited": [
+        "fork.webp"
+      ]
+    },
+    {
+      "id": "03-heat-instruments",
+      "owner": "asset-producer-03",
+      "status": "accepted",
+      "brief": "briefs/03-heat-instruments.md",
+      "assets": [
+        "furnace.webp",
+        "gauge.webp"
+      ],
+      "generation_targets": [
+        "furnace.webp"
+      ],
+      "output_directory": "output/assets/repair-candidates/03-heat-instruments",
+      "calls": [
+        {
+          "asset": "furnace.webp",
+          "mode": "edit",
+          "target_reference": "public/assets/furnace.webp",
+          "prompt": "Use case: stylized-concept. Asset type: one isolated icon for stored heat, energy recovery and the existing Stoker. Edit Image 1, the exact existing furnace icon. Preserve the current heat-container/furnace identity, complete body, fittings, materials, proportions, warm inner heat and original colors; remove the foreign image fragments identified in the audit and clean only the item boundary. Keep any glow contained within the object as in the reference. Center the complete item with about 8% transparent margin. Match the project's detailed rendered-item style. Keep its silhouette readable at 48 and 64 px on #102a2e and #eee8d8. Request a genuinely transparent background. One furnace only; no text, logo, frame, pedestal, room, second object, sparks, debris, added pipes, external fire cloud or watermark. Do not invent new game content."
+        }
+      ],
+      "production_assets": [
+        "furnace.webp"
+      ],
+      "control_assets_already_audited": [
+        "gauge.webp"
+      ],
+      "runtime_agent": "asset_producer_03"
+    },
+    {
+      "id": "04-upgrade-equipment",
+      "owner": "asset-producer-04",
+      "status": "generating",
+      "brief": "briefs/04-upgrade-equipment.md",
+      "assets": [
+        "prism.webp",
+        "vest.webp"
+      ],
+      "generation_targets": [
+        "prism.webp"
+      ],
+      "output_directory": "output/assets/repair-candidates/04-upgrade-equipment",
+      "calls": [
+        {
+          "asset": "prism.webp",
+          "mode": "edit",
+          "target_reference": "public/assets/prism.webp",
+          "prompt": "Use case: stylized-concept. Asset type: one isolated icon for the existing piercing/refraction upgrade. Edit Image 1, the exact existing prism icon. Preserve the prism's present optical-object identity, outline, facets, materials, proportions and palette; remove the foreign image fragments identified by audit and restore the clean complete silhouette. Do not turn it into another crystal or add a beam. Center the full prism with about 8% transparent margin. Match the project's detailed rendered-item finish and the reference lighting. Ensure its main outline and facets remain readable at 48 and 64 px on #102a2e and #eee8d8. Request a genuinely transparent background. Exactly one prism; no words, logo, border, pedestal, scene, extra crystal, detached light rays, debris or watermark. Do not redesign it or add lore."
+        }
+      ],
+      "production_assets": [
+        "prism.webp"
+      ],
+      "control_assets_already_audited": [
+        "vest.webp"
+      ],
+      "runtime_agent": "asset_producer_04"
+    },
+    {
+      "id": "05-repair-relics",
+      "owner": "asset-producer-05",
+      "status": "generating",
+      "brief": "briefs/05-repair-relics.md",
+      "assets": [
+        "tonic.webp",
+        "orb.webp"
+      ],
+      "generation_targets": [
+        "tonic.webp"
+      ],
+      "output_directory": "output/assets/repair-candidates/05-repair-relics",
+      "calls": [
+        {
+          "asset": "tonic.webp",
+          "mode": "edit",
+          "target_reference": "public/assets/tonic.webp",
+          "prompt": "Use case: stylized-concept. Asset type: one isolated icon for the existing repair kit and healing improvements. Edit Image 1, the exact existing tonic icon. Preserve its recognizable container/tonic identity, shape, closure, contents, proportions, materials and palette as shown; remove the foreign image fragments identified by the audit and clean the complete item's edge. Keep the contents within the container; do not add labels or medical symbols. Center the whole object with about 8% transparent margin. Match the project's detailed rendered-item style. Keep the silhouette distinct at 48 and 64 px on #102a2e and #eee8d8. Request a genuinely transparent background. One tonic only; no text, logo, frame, pedestal, scene, extra bottle, herbs, tools, detached droplets, debris or watermark. Do not redesign it or invent game content."
+        }
+      ],
+      "production_assets": [
+        "tonic.webp"
+      ],
+      "control_assets_already_audited": [
+        "orb.webp"
+      ],
+      "runtime_agent": "asset_producer_05"
+    },
+    {
+      "id": "06-garden-forecast",
+      "owner": "asset-producer-06",
+      "status": "queued",
+      "brief": "briefs/06-garden-forecast.md",
+      "assets": [
+        "seed.webp"
+      ],
+      "generation_targets": [
+        "seed.webp"
+      ],
+      "output_directory": "output/assets/repair-candidates/06-garden-forecast",
+      "calls": [
+        {
+          "asset": "seed.webp",
+          "mode": "edit",
+          "target_reference": "public/assets/seed.webp",
+          "prompt": "Use case: stylized-concept. Asset type: one isolated icon for the existing Gardener and seed-fan upgrade. Edit Image 1, the exact existing seed icon. Preserve the current seed/seed-pod identity, existing visible structure, proportions, materials and colors; restore the missing top so the full original silhouette is visible, then clean only the edge. Do not grow it into a plant or add leaves, roots or another object. Center one complete seed with about 8% transparent margin. Match the project's detailed rendered-item finish. Its main shape must read at 48 and 64 px on #102a2e and #eee8d8. Request a genuinely transparent background. One seed only; no text, logo, frame, pedestal, soil, garden scene, extra seed, detached particles or watermark. Do not invent game content."
+        }
+      ],
+      "production_assets": [
+        "seed.webp"
+      ],
+      "control_assets_already_audited": []
+    },
+    {
+      "id": "07-void-repair",
+      "owner": "asset-producer-07",
+      "status": "queued",
+      "brief": "briefs/07-void-repair.md",
+      "assets": [
+        "void.webp"
+      ],
+      "generation_targets": [
+        "void.webp"
+      ],
+      "production_assets": [
+        "void.webp"
+      ],
+      "control_assets_already_audited": [],
+      "output_directory": "output/assets/repair-candidates/07-void-repair",
+      "calls": [
+        {
+          "asset": "void.webp",
+          "mode": "edit",
+          "target_reference": "public/assets/void.webp",
+          "prompt": "Edit Image 1: restore the complete upper outline of this exact dark weather-forecast relic. Preserve its black stone egg body, aged brass curved cage blades and central luminous violet spiral lens. One isolated complete object, same detailed worn item-render style, native transparent background, all upper and lower metal tips fully visible, centered with 10 percent transparent margin on each side. No text, frame, extra items, detached debris, background scene or external glow cloud. Keep its identity; repair the crop rather than copy it."
+        }
+      ]
+    }
+  ],
+  "execution_policy": "One producer per remaining generation target; coordinator integrates all accepted candidates together, then runs one final game validation phase. Original clean assets already audited centrally."
+}

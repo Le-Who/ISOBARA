@@ -1,0 +1,11 @@
+{
+  "task": "03-heat-instruments",
+  "phase": "furnace-candidate-qc-written",
+  "furnace": "candidate ready for coordinator review",
+  "generator_png": "output/assets/repair-candidates/03-heat-instruments/furnace-source.png",
+  "candidate_webp": "output/assets/repair-candidates/03-heat-instruments/furnace.webp",
+  "provenance": "output/assets/repair-candidates/03-heat-instruments/furnace-provenance.json",
+  "qc": "output/assets/repair-candidates/03-heat-instruments/furnace-qc.md",
+  "gauge": "not re-audited per coordinator instruction; central audit retained",
+  "updated_utc": "2026-09-27T22:05:18.155692+00:00"
+}

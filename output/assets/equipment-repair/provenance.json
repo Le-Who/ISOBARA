@@ -1,0 +1,45 @@
+{
+  "tool": "built-in image_gen",
+  "model_id": null,
+  "note": "The built-in tool did not expose a confirmed model identifier. Each selected result contains one equipment item on a native transparent background.",
+  "assets": [
+    {
+      "asset": "cloak",
+      "code_mapping": "src/core/progression.ts makeItem: shell with rarity >= 3 uses cloak; src/core/content.ts uses cloak for speed, dash, and return upgrades.",
+      "reference": "public/assets/cloak.webp",
+      "returned_source_path": "C:\\Users\\user\\.codex\\generated_images\\01a0e4ce-cc9e-7a23-83d7-6af3d3f22de3\\exec-f5c6d5ea-0a6c-4c60-becd-b6bcab0ac7df.png",
+      "returned_source_sha256": "B8855006F9066E50B4502B1E5134961F2F85B1DD52D032A7E748FD844AF1C62C",
+      "workspace_source": "output/assets/equipment-repair/cloak-repair-source.png",
+      "workspace_source_sha256": "B8855006F9066E50B4502B1E5134961F2F85B1DD52D032A7E748FD844AF1C62C",
+      "candidate_webp": "output/assets/equipment-repair/cloak-candidate.webp",
+      "candidate_sha256": "23ADCE001F95490E7AAAEE6F5D973EFD93F7E86166D2FBD77147B0B2706E65D7",
+      "prompt": "Use case: stylized-concept. Asset type: one isolated game equipment inventory icon based on Image 1, the reference for this exact cloak. Recreate its identity as a weathered ivory and deep teal cloak with ragged split fabric panels, aged bronze shoulder fasteners, small chains, and an ornate clasp at the collar. Preserve the reference's materials, muted palette, worn texture, hardware arrangement, and painterly semi-realistic item-art style. Present the complete cloak in a three-quarter frontal view, centered as a single object. Show the entire collar hardware and every trailing fabric edge; leave 10–15% transparent space on every side. Genuine transparent background. One item only. Restore the missing silhouette, do not copy the crop. No detached scraps, duplicate items, scenery, shadow plate, border, frame, text, letters, or watermark.",
+      "candidate_dimensions": [366, 384],
+      "candidate_alpha_margins_px": {"left":14,"top":15,"right":11,"bottom":19},
+      "candidate_edge_pixels_alpha_ge_16": {"top":0,"right":0,"bottom":0,"left":0},
+      "candidate_components_alpha_ge_16": 1
+    },
+    {
+      "asset": "rotor",
+      "code_mapping": "src/core/progression.ts makeItem: instrument for aerologist uses rotor; src/core/content.ts maps rotor to Aerologist and Herdsman icons and to haste/linger upgrades.",
+      "reference": "public/assets/rotor.webp",
+      "returned_source_path": "C:\\Users\\user\\.codex\\generated_images\\01a0e4ce-cc9e-7a23-83d7-6af3d3f22de3\\exec-80fdab84-11db-4580-b585-0106f68a4d5e.png",
+      "returned_source_sha256": "26F824C21AA90801F6456480C9E665F7C19F2385FCFBF13AF4E4886C1B4B0337",
+      "workspace_source": "output/assets/equipment-repair/rotor-repair-source.png",
+      "workspace_source_sha256": "26F824C21AA90801F6456480C9E665F7C19F2385FCFBF13AF4E4886C1B4B0337",
+      "candidate_webp": "output/assets/equipment-repair/rotor-candidate.webp",
+      "candidate_sha256": "BEA1E1A898A0DCC872E8B7D78CFEEDA38441F1FB39C81B20EE4427C32655DCEB",
+      "prompt": "Use case: stylized-concept. Asset type: single isolated game equipment inventory icon based on Image 1, the reference for this exact wind rotor instrument. Recreate its identity: one compact three-blade rotor with a weathered ivory and bronze mechanical body, intricate aged-brass central hub, and a small turquoise glass lens. Preserve the reference's materials, muted palette, worn surface, mechanical details, and painterly semi-realistic game icon style. Show the entire rotor in a clear three-quarter view with all three complete blade tips visible and no cropped parts. Center it at a moderate scale, occupying about 70–75% of a square canvas and leaving roughly 10–15% transparent breathing room on each side. Genuine transparent background. One item only. No detached fragments, extra blades, duplicate rotor, scenery, shadow plate, border, frame, text, letters, or watermark.",
+      "candidate_dimensions": [384, 384],
+      "candidate_alpha_margins_px": {"left":27,"top":19,"right":34,"bottom":12},
+      "candidate_edge_pixels_alpha_ge_16": {"top":0,"right":0,"bottom":0,"left":0},
+      "candidate_components_alpha_ge_16": 1
+    }
+  ],
+  "qa": {
+    "candidate_measurements": "output/assets/equipment-repair/candidate-measurements.json",
+    "light_dark_preview": "output/assets/equipment-repair/candidates-light-dark.png",
+    "conversion_manifest": "output/assets/equipment-repair/conversion.json",
+    "conversion_note": "Whole-canvas resize to a maximum edge of 384 px, then lossless WebP conversion; no crop or manual cutout."
+  }
+}
