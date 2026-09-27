@@ -1,0 +1,42 @@
+{
+  "asset": "void",
+  "tool": "built-in image_gen",
+  "model_id": null,
+  "reference": "public/assets/void.webp",
+  "returned_path": "C:/Users/user/.codex/generated_images/01a0e4cd-b740-7521-a818-9777ed243c31/exec-b8281a65-d016-4f94-a00e-b8ba16526707.png",
+  "source": "output/assets/repair-candidates/07-void-repair/void-source.png",
+  "source_sha256": "90398ff5eeb4ba8c8198b94f13dcf2368608e21fba9e6259b3fcc3968cc0145b",
+  "webp": "output/assets/repair-candidates/07-void-repair/void.webp",
+  "webp_sha256": "85885842559cd5c53b317c7de2b40508968df83e5fa1d199bdbde13eaa23a8bf",
+  "prompt": "Edit the exact existing single game relic in Image 1. Restore the complete top of the ornate aged bronze cage surrounding its black stone egg body and bright violet spiral lens; the original top metal arcs are cropped. Preserve the same object identity, cage structure, dark materials, violet glow, proportions, painterly detailed item render, and three-quarter front view. Center the one complete relic with at least 10 percent transparent breathing room on all sides. Native transparent background. No detached fragments, duplicate object, added blades, scene, frame, pedestal, text, watermark or colored background.",
+  "qc": {
+    "size": [
+      384,
+      384
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "bbox_alpha_ge_16": [
+      91,
+      38,
+      293,
+      345
+    ],
+    "margins_px": {
+      "left": 91,
+      "top": 38,
+      "right": 91,
+      "bottom": 39
+    },
+    "edge_touch": {
+      "left": false,
+      "top": false,
+      "right": false,
+      "bottom": false
+    },
+    "preview": "output/assets/repair-candidates/07-void-repair/void-preview.png",
+    "conversion": "Whole generated image uniformly resized and centered in transparent 384x384, no crop or artistic pixel edits."
+  }
+}

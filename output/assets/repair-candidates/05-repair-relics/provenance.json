@@ -1,0 +1,42 @@
+{
+  "asset": "tonic",
+  "tool": "built-in image_gen",
+  "model_id": null,
+  "reference": "public/assets/tonic.webp",
+  "returned_path": "C:/Users/user/.codex/generated_images/01a0e4cd-b740-7521-a818-9777ed243c31/exec-0a46f6e1-73ca-460c-aa03-fd295e1270ed.png",
+  "source": "output/assets/repair-candidates/05-repair-relics/tonic-source.png",
+  "source_sha256": "f03cae67f51a9d88b6c107ae3bae9850c4c20343c63fdb39eef35d81c09578c0",
+  "webp": "output/assets/repair-candidates/05-repair-relics/tonic.webp",
+  "webp_sha256": "aea26132e55e849d99f5537954e291c05a485ba6399e0458a0eee238d9b1d124",
+  "prompt": "Edit this exact game equipment icon: one isolated turquoise healing tonic bottle in its original aged brass frame, with glass bulb, brass cap, lower filigree and side fittings. Preserve the existing detailed painterly semi-realistic item style, proportions, palette and identity. Remove the detached fragments beneath the bottle and show one complete bottle centered with at least 10% transparent margin on every side. Native transparent background. No extra vials, fragments, decorations, text, frame, scene, shadow plate, watermark or colored background.",
+  "qc": {
+    "size": [
+      384,
+      384
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "bbox_alpha_ge_16": [
+      120,
+      48,
+      263,
+      336
+    ],
+    "margins_px": {
+      "left": 120,
+      "top": 48,
+      "right": 121,
+      "bottom": 48
+    },
+    "edge_touch": {
+      "left": false,
+      "top": false,
+      "right": false,
+      "bottom": false
+    },
+    "preview": "output/assets/repair-candidates/05-repair-relics/tonic-preview.png",
+    "conversion": "Whole generated image uniformly resized and centered in transparent 384x384, no crop or artistic pixel edits."
+  }
+}

@@ -75,7 +75,7 @@
     },
     "prism.webp": {
       "owner": "04-upgrade-equipment",
-      "status": "generating",
+      "status": "accepted",
       "finding": "Foreign image fragments visible in audit."
     },
     "vest.webp": {
@@ -86,7 +86,7 @@
     },
     "tonic.webp": {
       "owner": "05-repair-relics",
-      "status": "generating",
+      "status": "accepted",
       "finding": "Foreign image fragments visible in audit."
     },
     "orb.webp": {
@@ -97,12 +97,12 @@
     },
     "seed.webp": {
       "owner": "06-garden-forecast",
-      "status": "queued",
+      "status": "accepted",
       "finding": "Top of silhouette clipped in audit."
     },
     "void.webp": {
       "owner": "07-void-repair",
-      "status": "queued",
+      "status": "accepted",
       "finding": "Close visual inspection confirms clipped upper metal cage; alpha>=16 touches top on 53 pixels."
     }
   },
@@ -203,7 +203,7 @@
     {
       "id": "04-upgrade-equipment",
       "owner": "asset-producer-04",
-      "status": "generating",
+      "status": "accepted",
       "brief": "briefs/04-upgrade-equipment.md",
       "assets": [
         "prism.webp",
@@ -232,7 +232,7 @@
     {
       "id": "05-repair-relics",
       "owner": "asset-producer-05",
-      "status": "generating",
+      "status": "accepted",
       "brief": "briefs/05-repair-relics.md",
       "assets": [
         "tonic.webp",
@@ -256,12 +256,12 @@
       "control_assets_already_audited": [
         "orb.webp"
       ],
-      "runtime_agent": "asset_producer_05"
+      "runtime_agent": "coordinator"
     },
     {
       "id": "06-garden-forecast",
       "owner": "asset-producer-06",
-      "status": "queued",
+      "status": "accepted",
       "brief": "briefs/06-garden-forecast.md",
       "assets": [
         "seed.webp"
@@ -281,12 +281,13 @@
       "production_assets": [
         "seed.webp"
       ],
-      "control_assets_already_audited": []
+      "control_assets_already_audited": [],
+      "runtime_agent": "asset_producer_seed_retry"
     },
     {
       "id": "07-void-repair",
       "owner": "asset-producer-07",
-      "status": "queued",
+      "status": "accepted",
       "brief": "briefs/07-void-repair.md",
       "assets": [
         "void.webp"
@@ -306,7 +307,8 @@
           "target_reference": "public/assets/void.webp",
           "prompt": "Edit Image 1: restore the complete upper outline of this exact dark weather-forecast relic. Preserve its black stone egg body, aged brass curved cage blades and central luminous violet spiral lens. One isolated complete object, same detailed worn item-render style, native transparent background, all upper and lower metal tips fully visible, centered with 10 percent transparent margin on each side. No text, frame, extra items, detached debris, background scene or external glow cloud. Keep its identity; repair the crop rather than copy it."
         }
-      ]
+      ],
+      "runtime_agent": "coordinator"
     }
   ],
   "execution_policy": "One producer per remaining generation target; coordinator integrates all accepted candidates together, then runs one final game validation phase. Original clean assets already audited centrally."

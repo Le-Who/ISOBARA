@@ -1,5 +1,5 @@
 {
-  "status": "collecting-candidates",
+  "status": "integrated-and-validated",
   "integration": "single batch followed by one final game validation phase",
   "assets": [
     {
@@ -48,5 +48,7 @@
     "gauge",
     "orb",
     "vest"
-  ]
+  ],
+  "validation_report": "evidence/asset-integration-checks.md",
+  "performance_status": "baseline-only; no accepted optimization; threshold not met"
 }

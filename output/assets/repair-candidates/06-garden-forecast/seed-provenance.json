@@ -1,0 +1,69 @@
+{
+  "asset": "seed",
+  "reference_image": "E:\\Projects\\ISOBARA\\public\\assets\\seed.webp",
+  "reference_sha256": "4a530ee1cefd6366acc9b115f85dae9183f523845f2443af598d00c72bf11fa5",
+  "method": "built-in image_gen edit",
+  "prompt": "Use case: stylized-concept\nAsset type: one isolated icon for the existing Gardener and seed-fan upgrade\nPrimary request: Edit Image 1, the exact existing seed icon. Preserve the current seed/pod identity, existing visible structure, proportions, materials, and colors. Restore the missing top so the full original silhouette is visible, then clean only the edge.\nInput images: Image 1: edit target, the exact existing seed.webp icon.\nScene/backdrop: genuinely transparent background.\nSubject: one complete version of the same existing seed/pod icon.\nStyle/medium: match the project's detailed rendered-item finish.\nComposition/framing: center one complete seed with about 8% transparent margin; the main shape must read clearly at 48 px and 64 px on both #102a2e and #eee8d8 backgrounds.\nConstraints: change only the missing top/edge; preserve the visible structure and object identity; restore the existing object's top. Do not grow it into a plant or add leaves, roots, or another object.\nAvoid: text, logo, frame, pedestal, soil, garden scene, extra seed, detached particles, watermark, invented game content.",
+  "image_gen_output_hint": "Generated images are saved to C:\\Users\\user\\.codex\\generated_images\\01a0e51f-7aeb-72a3-ab73-5392f98126f8 as C:\\Users\\user\\.codex\\generated_images\\01a0e51f-7aeb-72a3-ab73-5392f98126f8\\exec-6c716398-2f40-496a-988b-d97a6fe4098e.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.",
+  "generated_result_path": "C:\\Users\\user\\.codex\\generated_images\\01a0e51f-7aeb-72a3-ab73-5392f98126f8\\exec-6c716398-2f40-496a-988b-d97a6fe4098e.png",
+  "generated_png_copy": {
+    "path": "E:\\Projects\\ISOBARA\\output\\assets\\repair-candidates\\06-garden-forecast\\seed-source.png",
+    "size_px": [
+      1329,
+      1183
+    ],
+    "sha256": "4054db69b9b3307bfe31de60b1e0979aaeca447636153de5feeb2f0887aa1167",
+    "copied_sha256": "4054db69b9b3307bfe31de60b1e0979aaeca447636153de5feeb2f0887aa1167",
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  },
+  "webp": {
+    "path": "E:\\Projects\\ISOBARA\\output\\assets\\repair-candidates\\06-garden-forecast\\seed.webp",
+    "format": "WebP",
+    "lossless": true,
+    "size_px": [
+      379,
+      384
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "bounds_alpha_gte_8_px": [
+      86,
+      30,
+      293,
+      354
+    ],
+    "margin_alpha_gte_8_percent_ltrb": [
+      22.69,
+      7.81,
+      22.69,
+      7.81
+    ],
+    "canvas_note": "Full generated canvas preserved with transparent top/bottom padding before scaling; no crop.",
+    "bytes": 113436,
+    "sha256": "c1488900c2675301d4bb0924e03ac5cfbba8fe1052ed65b8acbaccf789dae0e9",
+    "lossless_pixel_exact": true,
+    "transparent_rgb_zeroed": true,
+    "transparent_rgb_nonzero_pixel_count": 0,
+    "suspect_roi_alpha_zero_hidden_rgb_pixels_before_cleanup": 0,
+    "cleanup_compositing_unchanged": {
+      "#102a2e": true,
+      "#eee8d8": true
+    },
+    "suspect_roi_pixels": [
+      292,
+      264,
+      332,
+      350
+    ],
+    "suspect_roi_alpha_zero": true,
+    "suspect_roi_hidden_nonzero_rgb_before_cleanup": 0,
+    "prior_default_export_alpha_zero": true,
+    "prior_default_export_hidden_nonzero_rgb_pixels": 72,
+    "alpha_unchanged": true
+  }
+}
