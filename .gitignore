@@ -1,13 +1,47 @@
+# Dependencies and local caches
 node_modules/
-.test-build/
-dev-dist/
-.playwright-cli/
+.npm/
+.cache/
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Development builds and generated test data
+/.test-build/
+/dev-dist/
+/.playwright-cli/
 /evidence/fixtures/
+/coverage/
+/playwright-report/
+/test-results/
+
+# Local experiments and independent project copies
+/scratch/
+/revisions/
+
+# Local environment; keep a shareable configuration example
 .env
 .env.*
 !.env.example
+
+# Package-manager diagnostics (evidence/*.log remains versioned)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor temporary files and OS metadata
+*.swp
+*.swo
+*~
 .DS_Store
 Thumbs.db
-/scratch/performance-lab/
-__pycache__/
-*.py[cod]
+Desktop.ini
+
+# dist/, public/assets/, output/assets/ and evidence/ are project deliverables.
+# Keep them available to Git; do not blanket-ignore builds, images or logs.

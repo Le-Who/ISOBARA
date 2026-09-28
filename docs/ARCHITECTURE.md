@@ -1,5 +1,7 @@
 # Architecture
 
+The existing runtime is TypeScript with locally vendored Three.js. Keep the 3D scene, camera, authored model kit, local UI images and offline builds when implementing roadmap packages. A general roadmap request does not authorize an engine migration, a 2D rewrite, asset removal or replacement of existing visuals with placeholders. Those changes require a separate explicit owner request. See [AGENTS.md](../AGENTS.md).
+
 `src/core` contains deterministic game rules, combat, progression, validation, persistence, input and Web Audio synthesis. `Simulation` accepts input frames; visual rendering never awards loot or applies damage independently. `GameState` is the serializable source of truth. Short-lived projectiles, visual events and spatial lookup arrays live outside the save.
 
 `src/world/world.ts` generates finite overworld chunks from the world seed and coordinates. A bounded cache retains descriptors, while the renderer owns streamed GPU resources. Main signals guarantee access to each campaign tier. Random portals use distance-dependent weighted distributions rather than uniform concentric tier bands.
