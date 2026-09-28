@@ -1,5 +1,5 @@
 import type {ClassId,Theme,Modifier,EnemyKind,BossId,Settings,Action} from './types.js';
-export const VERSION='1.0.0';
+export const VERSION='2.0.0';
 export const TITLE='ИЗОБАРА';
 export const SUBTITLE='Последний сад погоды';
 export const CLASSES:Record<ClassId,{name:string;tag:string;desc:string;icon:string;color:number;hp:number;damage:number;speed:number;attackTime:number;range:number;skill:string;skillDesc:string;burst:string;burstDesc:string}>={

@@ -4,7 +4,7 @@ import {Simulation} from './core/simulation.js';
 import {Input} from './core/input.js';
 import {AudioSystem} from './core/audio.js';
 import {SaveStore} from './core/storage.js';
-import {newGame,equipItem,salvage,respec,spendRespec,craftItem,restorePlayer} from './core/progression.js';
+import {newGame,equipItem,salvage,favorite,respec,spendRespec,craftItem,craftFamily,restorePlayer} from './core/progression.js';
 import {DEFAULT_SETTINGS,CLASSES,ACTION_NAMES} from './core/content.js';
 import {envelope,importText,validateSettings} from './core/validation.js';
 import {keyLabel} from './ui/assets.js';
@@ -31,7 +31,7 @@ class App {
   window.addEventListener('error',e=>{if(!(e instanceof ErrorEvent))return;this.audio.pause(true);this.input.reset();this.ui.message('Прогноз остановлен', 'Произошла ошибка выполнения. Экспортируйте текущее состояние и перезагрузите игру.\n\n'+e.message,[{label:'Экспорт прогресса',action:'export'},{label:'Перезагрузить',action:'reload',style:'secondary'}],true);void this.persist(true);});
   window.addEventListener('isobara-context-lost',()=>{this.contextLost=true;this.autoPause('Графический контекст потерян. Прогресс можно экспортировать.');this.ui.banner('Графика временно недоступна. Сохраните прогресс и перезагрузите игру.');void this.persist(true);});
   window.addEventListener('isobara-context-restored',()=>{this.contextLost=false;this.ui.toast('Графический контекст восстановлен.');});
-  if(__DEV__)window.__isobara=Object.freeze({snapshot:()=>structuredClone(this.sim.snapshot()),project:(x:number,z:number,y=1.5)=>this.view.project(x,z,y),pathTo:(target:{x:number;z:number})=>this.sim.navigationPath(target),camera:()=>({yaw:this.view.yaw,distance:this.view.distance}),metrics:()=>({...this.view.metrics,worldCache:(this.sim.world as any).cache?.size??null,enemyViews:this.view.enemyViews.size,particles:this.view.particleData.length,hazards:this.view.hazardViews.size,fx:this.view.fx.length,modal:this.ui.modal,busy:this.busy,saveReadOnly:this.store.readOnly,audio:this.audio.status()}),version:'1.0.0'});
+  if(__DEV__)window.__isobara=Object.freeze({snapshot:()=>structuredClone(this.sim.snapshot()),project:(x:number,z:number,y=1.5)=>this.view.project(x,z,y),pathTo:(target:{x:number;z:number})=>this.sim.navigationPath(target),camera:()=>({yaw:this.view.yaw,distance:this.view.distance}),metrics:()=>({...this.view.metrics,worldCache:(this.sim.world as any).cache?.size??null,enemyViews:this.view.enemyViews.size,particles:this.view.particleData.length,hazards:this.view.hazardViews.size,fx:this.view.fx.length,modal:this.ui.modal,busy:this.busy,saveReadOnly:this.store.readOnly,audio:this.audio.status()}),version:'2.0.0'});
   requestAnimationFrame(t=>this.loop(t));
   if(this.store.readOnly)this.ui.message('Игра уже открыта','Другая вкладка владеет этим сохранением. Здесь запись заблокирована, чтобы вкладки не перезаписали друг друга. Закройте другую вкладку и перезагрузите эту.',[{label:'Перезагрузить',action:'reload'}],true);
   else if(storageError)this.ui.message('Хранилище недоступно',storageError+'\n\nВременный сеанс не сохраняется автоматически. Его можно экспортировать вручную.',[{label:'Перезагрузить',action:'reload'},{label:'Временный сеанс',action:'volatile',style:'secondary'}],true);
@@ -128,23 +128,31 @@ class App {
   if(action==='station'){this.input.reset();this.ui.showStation(this.sim.state);this.audio.pause(true);return;}
   if(action.startsWith('item:')){this.ui.selectedItem=action.slice(5);this.ui.showInventory(this.sim.state);return;}
   if(action.startsWith('bag-tab:')){this.ui.inventoryTab=action.slice(8) as 'bag'|'mail';this.ui.showInventory(this.sim.state);return;}
-  if(action.startsWith('equip:')){if(equipItem(this.sim.state,action.slice(6))){await this.persist(true);this.ui.showInventory(this.sim.state);}return;}
-  if(action.startsWith('salvage-confirm:')){const id=action.slice(16),item=[...this.sim.state.inventory,...this.sim.state.mailbox].find(i=>i.id===id);if(item)this.ui.message('Разобрать предмет?',`${item.name}\n\nВы получите ${item.rarity*item.tier*3} деталей. Разбор необратим. Экипированный предмет разобрать нельзя.`,[{label:'Разобрать',action:'salvage:'+id,style:'danger'},{label:'Оставить',action:'inventory',style:'secondary'}]);return;}
-  if(action.startsWith('salvage:')){if(salvage(this.sim.state,action.slice(8))){this.ui.selectedItem='';await this.persist(true);}this.ui.showInventory(this.sim.state);return;}
+  if(action.startsWith('sort:')){const sort=action.slice(5);if(sort==='new'||sort==='tier'||sort==='rarity'){this.ui.inventorySort=sort;this.ui.showInventory(this.sim.state);}return;}
+  if(action.startsWith('fav:')){if(favorite(this.sim.state,action.slice(4))){await this.persist(true);this.ui.showInventory(this.sim.state);}return;}
+  if(action.startsWith('equip:')){if(this.sim.inCombat()){this.ui.toast('Смена снаряжения невозможна под ударом.',true);return;}if(equipItem(this.sim.state,action.slice(6))){await this.persist(true);this.ui.showInventory(this.sim.state);}return;}
+  if(action.startsWith('salvage-confirm:')){const id=action.slice(16),item=[...this.sim.state.inventory,...this.sim.state.mailbox].find(i=>i.id===id);if(this.sim.inCombat()){this.ui.toast('Разбор недоступен под ударом.',true);return;}if(item&&!item.fav)this.ui.message('Разобрать предмет?',`${item.name}\n\nВы получите ${item.rarity*item.tier*3} деталей. Разбор необратим. Экипированный и избранный предмет разобрать нельзя.`,[{label:'Разобрать',action:'salvage:'+id,style:'danger'},{label:'Оставить',action:'inventory',style:'secondary'}]);return;}
+  if(action.startsWith('salvage:')){if(this.sim.inCombat()){this.ui.toast('Разбор недоступен под ударом.',true);return;}if(salvage(this.sim.state,action.slice(8))){this.ui.selectedItem='';await this.persist(true);}this.ui.showInventory(this.sim.state);return;}
   if(action==='respec-confirm'){this.ui.message('Перенастроить профиль?','Все вложенные ранги вернутся точками настройки. Потратить их можно на доступные вашей специализации улучшения. Опыт и снаряжение не изменятся.',[{label:'Перенастроить',action:'respec'},{label:'Оставить как есть',action:'upgrades',style:'secondary'}]);return;}
   if(action==='respec'){if(respec(this.sim.state))await this.persist(true);this.ui.showUpgrades(this.sim.state);return;}
   if(action.startsWith('spend:')){if(spendRespec(this.sim.state,action.slice(6)))await this.persist(true);this.ui.showUpgrades(this.sim.state);return;}
+  if(action.startsWith('craft-family:')){const item=craftFamily(this.sim.state,action.slice(13));if(item){await this.persist(true);this.ui.selectedItem=item.id;this.ui.toast('Собран предмет: '+item.name);this.ui.showInventory(this.sim.state);}return;}
+  if(action.startsWith('loadout:')){const k=action.slice(8),st=this.sim.state;if((k==='default'||k==='alt')&&st.phase==='world'&&!this.sim.inCombat()&&Math.hypot(st.player.x,st.player.z)<12&&(k==='default'||st.npcs.irma?.heard.includes('taught'))){st.loadout.skill=k;await this.persist(true);this.ui.updateDock(st,this.settings);this.ui.showStation(st);}return;}
+  if(action.startsWith('dialogue:')){const [,id,choice]=action.split(':'),v=this.sim.dialogueChoice(id,choice);if(v){await this.persist(true);this.ui.updateDock(this.sim.state,this.settings);this.ui.showDialogue(v);}return;}
+  if(action.startsWith('rank:')){const parts=action.split(':'),portal=this.sim.world.getPortal(parts.slice(2).join(':'));if(portal&&this.sim.setRank(Number(parts[1]))){await this.persist(true);this.ui.showPortal(this.sim.state,portal);}return;}
   if(action==='craft'){const item=craftItem(this.sim.state);if(item){await this.persist(true);this.ui.selectedItem=item.id;this.ui.toast('Собран предмет: '+item.name);this.ui.showInventory(this.sim.state);}return;}
   if(action.startsWith('ability:')){if(!this.ui.modal)this.input.pulse(action.slice(8) as Action);return;}
   if(action==='interact'){if(this.ui.modal)return;const target=this.sim.interactable();if(!target)return;this.input.reset();this.audio.pause(true);
    if(target.kind==='portal')this.ui.showPortal(this.sim.state,target.data as Portal);
    else if(target.kind==='exit')this.ui.message('Отступить из экспедиции?','Опыт за уже побеждённые механизмы останется. Награда за завершение не выдаётся. Следующий вход создаст новую попытку.',[{label:'Отступить',action:'abandon',style:'danger'},{label:'Продолжить экспедицию',action:'close',style:'secondary'}]);
    else if(target.kind==='rest'){this.sim.rest((target.data as any).id);this.audio.pause(false);}
+   else if(target.kind==='npc'){const v=this.sim.talkTo(target.data.id);if(v)this.ui.showDialogue(v);else this.audio.pause(false);}
+   else if(target.kind==='device'){this.sim.useDevice(target.data.id);this.audio.pause(false);}
    else{const poi=target.data as Poi,text=this.sim.usePoi(poi);if(poi.id==='home')this.ui.showStation(this.sim.state);else if(text)this.ui.message(poi.title,text);}
    return;
   }
   if(action.startsWith('enter:')){const id=action.slice(6),portal=this.sim.world.getPortal(id);if(!portal)return;this.busy=true;this.ui.transition(true,'Собираем фрагменты станции…');this.input.reset();const previous=structuredClone(this.sim.state);
-   try{await new Promise<void>(r=>requestAnimationFrame(()=>r()));if(!this.sim.portalEnter(portal))throw new Error('Подойдите ближе к разлому.');if(!await this.persist(true)&&!this.volatile){this.sim=new Simulation(previous);this.view.setSimulation(this.sim);throw new Error('Вход отменён: не удалось записать контрольную точку.');}this.sim.drain();this.view.rebuild();this.ui.forceClose();this.ui.updateDock(this.sim.state,this.settings);this.audio.pause(false);this.audio.sfx('portal');}
+   try{await new Promise<void>(r=>requestAnimationFrame(()=>r()));this.sim.refusal='';if(!this.sim.portalEnter(portal))throw new Error(this.sim.refusal||'Подойдите ближе к разлому.');if(!await this.persist(true)&&!this.volatile){this.sim=new Simulation(previous);this.view.setSimulation(this.sim);throw new Error('Вход отменён: не удалось записать контрольную точку.');}this.sim.drain();this.view.rebuild();this.ui.forceClose();this.ui.updateDock(this.sim.state,this.settings);this.audio.pause(false);this.audio.sfx('portal');}
    finally{this.ui.transition(false);this.busy=false;}return;
   }
   if(action.startsWith('reward-select:')){this.ui.selectedReward=Number(action.slice(14));this.ui.showReward(this.sim.state);return;}

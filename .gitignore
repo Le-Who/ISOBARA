@@ -19,6 +19,7 @@ venv/
 /coverage/
 /playwright-report/
 /test-results/
+/output/releases/
 
 # Local experiments and independent project copies
 /scratch/
@@ -44,4 +45,4 @@ Thumbs.db
 Desktop.ini
 
 # dist/, public/assets/, output/assets/ and evidence/ are project deliverables.
-# Keep them available to Git; do not blanket-ignore builds, images or logs.
+# Keep them available to Git; local ZIP packages under output/releases/ are reproducible.

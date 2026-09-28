@@ -4,6 +4,8 @@ import {Kit} from './models.js';
 import {THEMES,CLASSES} from '../core/content.js';
 import {CHUNK,heightAt,regionAt,roadDistance,finalPortal} from '../world/world.js';
 import {RNG,hash,noise,clamp,lerp,dist} from '../core/math.js';
+import {NPC_SPOTS} from '../world/encounters.js';
+import {NPCS} from '../core/dialogue.js';
 const GOLD=0xb69661,IVORY=0xe1d7bb;
 function polygon(r){const w=r.w/2,d=r.d/2;
  if(r.shape==='octagon'){const c=Math.min(w,d)*.66;return [[-c,-d],[c,-d],[w,-c],[w,c],[c,d],[-c,d],[-w,c],[-w,-c]];}
@@ -13,7 +15,7 @@ function polygon(r){const w=r.w/2,d=r.d/2;
 export class GameView {
  renderer;scene;camera;kit=new Kit();env=new T.Group();actors=new T.Group();effects=new T.Group();mode='world';sim;settings;player;
  yaw=.34;distance=29;target=new T.Vector3();elapsed=0;menu=true;shake=0;chunks=new Map();queue=[];enemyViews=new Map();hazardViews=new Map();portals=[];roomViews=[];
- particleData=[];particles;bulletFriendly;bulletEnemy;fx=[];dummy=new T.Object3D();color=new T.Color();raycaster=new T.Raycaster();mouse=new T.Vector2();groundPlane=new T.Plane();windTime={value:0};metrics={fps:0,frameMs:0,drawCalls:0,triangles:0,geometries:0,textures:0,chunks:0};
+ particleData=[];particles;bulletFriendly;bulletEnemy;bulletDiscs;fx=[];dummy=new T.Object3D();color=new T.Color();raycaster=new T.Raycaster();mouse=new T.Vector2();groundPlane=new T.Plane();windTime={value:0};metrics={fps:0,frameMs:0,drawCalls:0,triangles:0,geometries:0,textures:0,chunks:0};
  constructor(container,settings){
   this.settings=settings;
   this.renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance',alpha:false});this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.12;
@@ -30,8 +32,8 @@ export class GameView {
  createWater(){this.waterMat=new T.ShaderMaterial({uniforms:{time:this.windTime,color:{value:new T.Color(0x507f7c)},fogColor:{value:new T.Color(0x94afa9)},eye:{value:new T.Vector3()}},vertexShader:'varying vec3 vWorld;void main(){vec4 p=modelMatrix*vec4(position,1.);vWorld=p.xyz;gl_Position=projectionMatrix*viewMatrix*p;}',fragmentShader:`varying vec3 vWorld;uniform float time;uniform vec3 color;uniform vec3 fogColor;uniform vec3 eye;void main(){float a=sin(vWorld.x*.38+vWorld.z*.17+time*.3);float b=sin(vWorld.z*.66-vWorld.x*.14-time*.21);float line=pow(max(0.,a*.5+b*.5),14.);vec3 c=color+line*.09;float fog=smoothstep(38.,100.,distance(eye,vWorld));gl_FragColor=vec4(mix(c,fogColor,fog),1.);#include <tonemapping_fragment>\n#include <colorspace_fragment>}`.replace('1.);#include','1.);\n#include')});const water=new T.Mesh(new T.PlaneGeometry(2000,2000),this.waterMat);water.rotation.x=-Math.PI/2;water.position.y=-.6;this.scene.add(water);this.water=water;}
  createPollen(){const rng=new RNG(97),g=new T.BufferGeometry(),pos=[];for(let i=0;i<130;i++)pos.push(rng.range(-65,65),rng.range(2,20),rng.range(-65,65));g.setAttribute('position',new T.Float32BufferAttribute(pos,3));this.pollen=new T.Points(g,new T.PointsMaterial({color:0xe8d5a5,size:.085,transparent:true,opacity:.40,depthWrite:false}));this.scene.add(this.pollen);}
  createParticles(){this.particles=new T.InstancedMesh(this.kit.ball(0),this.kit.basic(0xffffff),480);this.particles.instanceMatrix.setUsage(T.DynamicDrawUsage);this.particles.count=0;this.particles.frustumCulled=false;this.scene.add(this.particles);}
- createProjectiles(){this.bulletFriendly=new T.InstancedMesh(this.kit.ball(0),this.kit.basic(0x9fedda),220);this.bulletEnemy=new T.InstancedMesh(this.kit.ball(0),this.kit.basic(0xffa478),220);for(const mesh of [this.bulletFriendly,this.bulletEnemy]){mesh.count=0;mesh.frustumCulled=false;mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);this.scene.add(mesh);}}
- setSimulation(sim){this.sim=sim;if(this.player)this.kit.release(this.player);this.player=this.kit.player(sim.p.classId);this.actors.add(this.player);this.rebuild();}
+ createProjectiles(){this.bulletFriendly=new T.InstancedMesh(this.kit.ball(0),this.kit.basic(0x9fedda),220);this.bulletEnemy=new T.InstancedMesh(this.kit.ball(0),this.kit.basic(0xffa478),220);this.bulletDiscs=new T.InstancedMesh(this.kit.torus(.36,.075),this.kit.basic(0xd7bbff),220);for(const mesh of [this.bulletFriendly,this.bulletEnemy,this.bulletDiscs]){mesh.count=0;mesh.frustumCulled=false;mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);this.scene.add(mesh);}}
+ setSimulation(sim){this.sim=sim;if(this.player)this.kit.release(this.player);this.player=this.kit.player(sim.p.classId,sim.st.family);this.actors.add(this.player);this.rebuild();}
  rebuild(){
   if(!this.sim)return;for(const c of [...this.env.children])this.kit.release(c);for(const root of this.enemyViews.values())this.kit.release(root);this.enemyViews.clear();for(const root of this.hazardViews.values())this.kit.release(root);this.hazardViews.clear();this.chunks.clear();this.queue=[];this.portals=[];this.roomViews=[];
   this.mode=this.sim.layout?'expedition':'world';this.water.position.y=this.mode==='world'?-.6:-11;
@@ -39,6 +41,9 @@ export class GameView {
   if(this.mode==='world'){
    const station=this.kit.station(this.sim.state.seals);station.position.y=heightAt(0,0,this.sim.state.seed);this.env.add(station);this.station=station;
    if(this.sim.state.seals.length===5){const desc=finalPortal(this.sim.state.seed),root=this.kit.portal(desc,this.sim.state.finalCleared);root.position.set(desc.x,this.y(desc.x,desc.z),desc.z);this.env.add(root);this.portals.push(root);}
+   this.npcViews=[];for(const [id,pos] of Object.entries(NPC_SPOTS)){const def=NPCS[id],actor=this.kit.npc(id);actor.position.set(pos.x,this.y(pos.x,pos.z),pos.z);
+    if(actor.userData.health)actor.userData.health.holder.visible=false;if(actor.userData.wind)actor.userData.wind.visible=false;
+    const mark=this.kit.npcMark(def.color);mark.position.y=2.9;actor.add(mark);const label=this.kit.glyph(def.name,`#${def.color.toString(16).padStart(6,'0')}`,.7);label.position.y=3.65;actor.add(label);this.env.add(actor);this.npcViews.push({actor,pos,mark});}
    this.updateChunks(true);for(let i=0;i<9&&this.queue.length;i++)this.buildQueuedChunk();
   }else{this.station=null;this.buildDungeon();for(const e of this.sim.enemies()){const actor=this.kit.enemy(e.kind,e.boss);this.actors.add(actor);this.enemyViews.set(e.id,actor);}}
  }
@@ -50,8 +55,20 @@ export class GameView {
  buildQueuedChunk(){if(!this.queue.length)return;const {x,z,key}=this.queue.shift();if(this.chunks.has(key))return;const desc={...this.sim.world.chunk(x,z),cx:x,cz:z},root=new T.Group();this.buildTerrain(root,desc);this.buildProps(root,desc);
   for(const p of desc.portals){const model=this.kit.portal(p,!!this.sim.state.completions[p.id]);model.position.set(p.x,this.y(p.x,p.z),p.z);root.add(model);this.portals.push(model);}
   for(const p of desc.pois)if(p.id!=='home'){const model=this.kit.poi(p,this.sim.state.collected.includes(p.id));model.position.set(p.x,this.y(p.x,p.z),p.z);root.add(model);}
+  root.userData.marks=[];
+  for(const enc of desc.encounters){const b=this.kit.beacon(enc.kind);b.position.set(enc.x,this.y(enc.x,enc.z),enc.z);root.add(b);root.userData.marks.push({enc,model:b,type:'beacon'});
+   if(enc.device){const n=this.kit.node();n.position.set(enc.device.x,this.y(enc.device.x,enc.device.z),enc.device.z);root.add(n);root.userData.marks.push({enc,model:n,type:'node'});}}
   this.chunks.set(key,root);this.env.add(root);
  }
+ syncEnemyViews(){const list=this.sim.worldEnemies,ids=new Set(list.map(e=>e.id));
+  for(const e of list)if(!this.enemyViews.has(e.id)){const a=this.kit.enemy(e.kind,e.boss,!!e.elite);this.actors.add(a);this.enemyViews.set(e.id,a);}
+  for(const [id,root] of [...this.enemyViews])if(!ids.has(id)){this.kit.release(root);this.enemyViews.delete(id);}}
+ updateMarks(){const st=this.sim.state,calm=Math.max(0,st.seals.length-1);
+  for(const root of this.chunks.values())for(const m of root.userData.marks??[]){const done=!!st.encounters[m.enc.id]?.done,calmed=!done&&m.enc.kind!=='named'&&!m.enc.fixed&&m.enc.tier<=calm;
+   const awake=this.sim.worldEnemies.some(e=>!e.dead&&this.sim.awake.has(e.id)&&this.sim.encOf(e)===m.enc);
+   const color=done||calmed?0x8ee6b0:awake?0xff7a5c:m.enc.kind==='named'?0xd58cff:m.type==='node'?0xffe08a:0xffc36b,d=m.model.userData;
+   d.lamp.material.color.setHex(color);if(d.ground)d.ground.material.color.setHex(color);m.model.visible=!(m.type==='node'&&done&&false);
+   d.lamp.scale.setScalar((m.type==='node'?.17:.27)*(done||calmed?.8:1+Math.sin(this.elapsed*3)*.12));}}
  buildTerrain(parent,c){const n=16,positions=[],colors=[],indices=[],seed=this.sim.state.seed,color=new T.Color(),a=new T.Color(),b=new T.Color();
   for(let iz=0;iz<=n;iz++)for(let ix=0;ix<=n;ix++){const x=c.cx*32+ix*2,z=c.cz*32+iz*2,y=heightAt(x,z,seed);positions.push(x,y,z);const r=Math.hypot(x,z),variation=noise(x*.21,z*.21,seed+7)*.08+noise(x*.047,z*.047,seed+33)*.11;
    if(r<65)color.setHex(0x8aa68b);else if(r<80){a.setHex(0x8aa68b);b.setHex(0xbd9d76);color.copy(a).lerp(b,(r-65)/15);}else if(r<140)color.setHex(0xbd9d76);else if(r<155){a.setHex(0xbd9d76);b.setHex(0x9195aa);color.copy(a).lerp(b,(r-140)/15);}else color.setHex(0x9195aa);
@@ -131,7 +148,8 @@ export class GameView {
   if(e.type==='warning'&&e.value!==undefined&&this.settings.shake)this.shake=.18;
   if(e.type==='shot'){this.player.userData.attack=.15;this.emitParticles({x:e.x+(e.dx??0),z:e.z+(e.dz??0),color:e.color},3,.5);}
   if(e.type==='slash'){if(Math.hypot(e.x-this.sim.p.x,e.z-this.sim.p.z)<.3)this.player.userData.attack=.25;this.transientArc(e);}
-  if(e.type==='cast'){this.emitParticles(e,24,2);if(e.dx!==undefined)this.transientBeam(e);else this.transientRing(e);}
+  if(e.type==='cast'){this.emitParticles(e,24,2);if(e.visual)this.transientSkill(e);else if(e.dx!==undefined)this.transientBeam(e);else this.transientRing(e);}
+  if(e.type==='combo'&&e.visual==='finisher')this.transientSkill(e);
  }
  emitParticles(e,count,spread){if(!this.settings.particles)return;const rng=new RNG(hash(this.seqCounter=(this.seqCounter??0)+1,Math.round(this.elapsed*1000)));const limit=this.settings.quality==='low'?120:460;
   for(let i=0;i<count&&this.particleData.length<limit;i++)this.particleData.push({x:e.x,y:this.y(e.x,e.z)+.8,z:e.z,vx:rng.range(-spread,spread),vy:rng.range(1,4),vz:rng.range(-spread,spread),life:rng.range(.25,.8),full:.8,size:rng.range(.035,.12),color:e.color??0x9fe4cb});
@@ -139,11 +157,26 @@ export class GameView {
  transientRing(e){const geo=this.kit.geo('fx-ring',()=>new T.RingGeometry(.9,1,56)),mesh=new T.Mesh(geo,new T.MeshBasicMaterial({color:e.color??0xacebd6,transparent:true,opacity:.7,side:T.DoubleSide,depthWrite:false}));mesh.rotation.x=-Math.PI/2;mesh.position.set(e.x,this.y(e.x,e.z)+.12,e.z);this.effects.add(mesh);this.fx.push({mesh,life:.55,full:.55,size:e.radius??4,ring:true});}
  transientArc(e){const geo=new T.RingGeometry((e.radius??3)*.8,e.radius??3,28,1,-.9,1.8);geo.rotateX(-Math.PI/2);const mat=new T.MeshBasicMaterial({color:e.color??CLASSES[this.sim.p.classId].color,side:T.DoubleSide,transparent:true,opacity:.62,depthWrite:false});const mesh=new T.Mesh(geo,mat);mesh.position.set(e.x,this.y(e.x,e.z)+.56,e.z);mesh.rotation.y=-Math.atan2(e.dz??1,e.dx??0);this.effects.add(mesh);this.fx.push({mesh,life:.18,full:.18});}
  transientBeam(e){const a=new T.Vector3(e.x,this.y(e.x,e.z)+1.3,e.z),b=new T.Vector3(e.x+e.dx,this.y(e.x+e.dx,e.z+e.dz)+1.1,e.z+e.dz),geo=new T.BufferGeometry().setFromPoints([a,b]),mesh=new T.Line(geo,new T.LineBasicMaterial({color:e.color??0xd0fff1,transparent:true,opacity:1,depthTest:false}));this.effects.add(mesh);this.fx.push({mesh,life:.23,full:.23});}
+ transientSkill(e){
+  if(e.visual==='anchor'){
+   for(let i=0;i<3;i++){const mesh=new T.Mesh(this.kit.geo('fx-ring',()=>new T.RingGeometry(.9,1,56)),new T.MeshBasicMaterial({color:i===0?0xf3cb83:0xffe3ae,transparent:true,opacity:.76,side:T.DoubleSide,depthWrite:false}));mesh.rotation.x=-Math.PI/2;mesh.position.set(e.x,this.y(e.x,e.z)+.13+i*.08,e.z);mesh.scale.setScalar(9.5-i*1.5);this.effects.add(mesh);this.fx.push({mesh,life:.55+i*.08,full:.55+i*.08,size:9.5-i*1.5,ring:true,reverse:true});}
+   return;
+  }
+  if(e.visual==='lance'||e.visual==='gust'||e.visual==='finisher'){
+   const length=Math.hypot(e.dx,e.dz)||1,nx=-(e.dz??0)/length,nz=(e.dx??0)/length,color=e.color??0xb4fff0;
+   for(const offset of e.visual==='lance'?[-.22,0,.22]:e.visual==='gust'?[-.58,0,.58]:[-.15,.15])this.transientBeam({...e,x:e.x+nx*offset,z:e.z+nz*offset,color});
+   if(e.visual==='lance'){
+    const tip=new T.Mesh(this.kit.cone(8),new T.MeshBasicMaterial({color:0xd6fff6,transparent:true,opacity:.88,depthWrite:false}));tip.position.set(e.x+e.dx,this.y(e.x+e.dx,e.z+e.dz)+1.1,e.z+e.dz);tip.rotation.x=Math.PI/2;tip.rotation.y=Math.atan2(e.dx,e.dz);tip.scale.set(.48,1.2,.48);this.effects.add(tip);this.fx.push({mesh:tip,life:.30,full:.30});
+   }else if(e.visual==='gust'){
+    this.transientRing({...e,radius:2.3,color});for(const q of [.33,.66,1])this.transientArc({...e,x:e.x+e.dx*q,z:e.z+e.dz*q,radius:1.9,color});
+   }else{this.transientRing({...e,x:e.x+e.dx,z:e.z+e.dz,radius:2.1,color});this.emitParticles({x:e.x+e.dx,z:e.z+e.dz,color},14,1.1);}
+  }
+ }
  updateParticles(dt){for(const p of this.particleData){p.life-=dt;p.x+=p.vx*dt;p.z+=p.vz*dt;p.y+=p.vy*dt;p.vy-=5*dt;}this.particleData=this.particleData.filter(p=>p.life>0);this.particles.count=this.particleData.length;
   for(let i=0;i<this.particleData.length;i++){const p=this.particleData[i];this.dummy.position.set(p.x,p.y,p.z);this.dummy.rotation.set(0,0,0);this.dummy.scale.setScalar(p.size*Math.min(1,p.life*5));this.dummy.updateMatrix();this.particles.setMatrixAt(i,this.dummy.matrix);this.color.setHex(p.color);this.particles.setColorAt(i,this.color);}if(this.particles.count){this.particles.instanceMatrix.needsUpdate=true;this.particles.instanceColor.needsUpdate=true;}
-  for(const f of this.fx){f.life-=dt;f.mesh.material.opacity=Math.max(0,f.life/f.full)*.7;if(f.ring)f.mesh.scale.setScalar(f.size*(1-f.life/f.full));}for(const f of this.fx.filter(f=>f.life<=0))this.kit.release(f.mesh);this.fx=this.fx.filter(f=>f.life>0);
+  for(const f of this.fx){f.life-=dt;f.mesh.material.opacity=Math.max(0,f.life/f.full)*.7;if(f.ring)f.mesh.scale.setScalar(f.size*(f.reverse?f.life/f.full:1-f.life/f.full));}for(const f of this.fx.filter(f=>f.life<=0))this.kit.release(f.mesh);this.fx=this.fx.filter(f=>f.life>0);
  }
- updateBullets(){let f=0,e=0;for(const p of this.sim.projectiles){const mesh=p.enemy?this.bulletEnemy:this.bulletFriendly,index=p.enemy?e++:f++;if(index>=220)continue;this.dummy.position.set(p.x,this.y(p.x,p.z)+1.15,p.z);this.dummy.rotation.set(0,Math.atan2(p.vx,p.vz),0);this.dummy.scale.set(p.enemy?.20:.105,p.enemy?.20:.105,p.enemy?.33:.44);this.dummy.updateMatrix();mesh.setMatrixAt(index,this.dummy.matrix);}this.bulletFriendly.count=Math.min(f,220);this.bulletEnemy.count=Math.min(e,220);this.bulletFriendly.instanceMatrix.needsUpdate=true;this.bulletEnemy.instanceMatrix.needsUpdate=true;}
+ updateBullets(){let f=0,e=0,d=0;for(const p of this.sim.projectiles){const disc=!p.enemy&&p.turn!==undefined,mesh=p.enemy?this.bulletEnemy:disc?this.bulletDiscs:this.bulletFriendly,index=p.enemy?e++:disc?d++:f++;if(index>=220)continue;this.dummy.position.set(p.x,this.y(p.x,p.z)+1.15,p.z);this.dummy.rotation.set(disc?-.3:0,Math.atan2(p.vx,p.vz)+(disc?this.elapsed*13:0),disc?.35:0);this.dummy.scale.set(disc?1:p.enemy?.20:.105,disc?1:p.enemy?.20:.105,disc?1:p.enemy?.33:.44);this.dummy.updateMatrix();mesh.setMatrixAt(index,this.dummy.matrix);}for(const [mesh,count] of [[this.bulletFriendly,f],[this.bulletEnemy,e],[this.bulletDiscs,d]]){mesh.count=Math.min(count,220);mesh.instanceMatrix.needsUpdate=true;}}
  updateHazards(){const keep=new Set();for(const h of this.sim.hazards){keep.add(h.id);let group=this.hazardViews.get(h.id);if(!group){group=new T.Group();const color=h.enemy?0xf28b6f:0x98d6c8;
    if(h.kind==='line'){const fill=new T.Mesh(this.kit.geo('hazard-plane',()=>new T.PlaneGeometry(1,1)),new T.MeshBasicMaterial({color,side:T.DoubleSide,transparent:true,opacity:.3,depthWrite:false}));fill.rotation.x=-Math.PI/2;group.add(fill);group.userData={fill};}
    else{const fill=new T.Mesh(this.kit.geo('circle',()=>new T.CircleGeometry(1,48)),new T.MeshBasicMaterial({color,side:T.DoubleSide,transparent:true,opacity:.12,depthWrite:false}));fill.rotation.x=-Math.PI/2;const ring=new T.Mesh(this.kit.geo('warning-ring',()=>new T.RingGeometry(.93,1,64)),new T.MeshBasicMaterial({color,side:T.DoubleSide,transparent:true,opacity:.9,depthWrite:false}));ring.rotation.x=-Math.PI/2;ring.position.y=.01;group.add(fill,ring);group.userData={fill,ring};}
@@ -160,10 +193,11 @@ export class GameView {
   data.rotors?.forEach((rotor,i)=>rotor.rotation[rotor.userData.axis??'y']+=dt*(.23+i*.07));
   if(data.floating)data.floating.position.y=3+Math.sin(this.elapsed*1.1)*.17;
   if(isPlayer){data.attack=Math.max(0,data.attack-dt);data.arms[0].rotation.x=swing*.30;data.arms[1].rotation.x=data.attack>0?-.65:-swing*.25;data.tool.rotation.y=pos.classId==='harvester'&&data.attack>0?Math.sin(data.attack*24)*.55:0;data.cape.rotation.x=.08+walking*.2+Math.sin(this.elapsed*2)*.045;}
-  else{data.flash=Math.max(0,data.flash-dt);root.scale.setScalar(1+data.flash*.22);data.wind.visible=pos.windup>0;data.wind.scale.setScalar(1+Math.sin(this.elapsed*8)*.05);if(data.health){data.health.holder.visible=pos.hp<pos.maxHp||pos.windup>0;data.health.fill.scale.x=data.health.width*.96*clamp(pos.hp/pos.maxHp,0,1);}}
+  else{data.flash=Math.max(0,data.flash-dt);root.scale.setScalar((pos.elite?1.35:1)*(1+data.flash*.22));data.wind.visible=pos.windup>0;data.wind.scale.setScalar(1+Math.sin(this.elapsed*8)*.05);if(data.health){data.health.holder.visible=pos.hp<pos.maxHp||pos.windup>0;data.health.fill.scale.x=data.health.width*.96*clamp(pos.hp/pos.maxHp,0,1);}}
  }
  update(dt){if(!this.sim)return;this.elapsed+=dt;this.windTime.value=this.elapsed;this.updateChunks();if(this.queue.length)this.buildQueuedChunk();
-  const p=this.sim.p;this.animateActor(this.player,p,dt,true);
+  const p=this.sim.p;if(this.player.userData.family!==this.sim.st.family){this.kit.release(this.player);this.player=this.kit.player(p.classId,this.sim.st.family);this.actors.add(this.player);}this.animateActor(this.player,p,dt,true);
+  if(this.mode==='world'){this.syncEnemyViews();this.updateMarks();for(const n of this.npcViews??[]){n.actor.rotation.y=Math.atan2(p.x-n.pos.x,p.z-n.pos.z);n.mark.position.y=2.9+Math.sin(this.elapsed*2)*.12;n.mark.rotation.y+=dt;}}
   for(const e of this.sim.enemies()){const root=this.enemyViews.get(e.id);if(root){root.visible=!e.dead;if(!e.dead)this.animateActor(root,e,dt);}}
   for(const root of this.portals){const d=root.userData;d.shader.uniforms.time.value=this.elapsed;d.inner.rotation.z=this.elapsed*.25;d.outer.rotation.z=Math.sin(this.elapsed*.22)*.08;d.label.visible=this.menu||dist({x:root.getWorldPosition(new T.Vector3()).x,z:root.getWorldPosition(new T.Vector3()).z},p)<34;}
   if(this.station){this.station.userData.crown.rotation.y=this.elapsed*.11;this.station.userData.core.position.y=2.95+Math.sin(this.elapsed*.9)*.12;}

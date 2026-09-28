@@ -12,6 +12,7 @@ export class AudioSystem {
   else if(type==='hit')this.tone(130,60,.075,.07,'triangle');
   else if(type==='warning')this.tone(120,66,.19,.10,'sine');
   else if(type==='dash')this.tone(150,600,.16,.05,'sine');
+  else if(type==='combo')this.tone(520,940,.12,.05,'sine');
   else if(type==='kill'){this.tone(185,75,.14,.06,'triangle');this.tone(750,460,.12,.02,'sine');}
   else if(type==='heal'){for(let i=0;i<3;i++)this.tone(330*2**(i/6),330*2**(i/6),.36,.04,'sine',false,i*.10);}
   else if(type==='level'||type==='loot'||type==='room'){for(let i=0;i<4;i++)this.tone(293.66*[1,1.25,1.5,2][i],293.66*[1,1.25,1.5,2][i],.65,.04,'sine',false,i*.10);}

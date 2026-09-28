@@ -1,5 +1,6 @@
 import {RNG,hash,noise,clamp,dist,segmentDistance} from '../core/math.js';
-import type {Vec,Theme,Portal,Poi,Chunk,Modifier,Obstacle} from '../core/types.js';
+import type {Vec,Theme,Portal,Poi,Chunk,Modifier,Obstacle,Encounter} from '../core/types.js';
+import {fixedEncounters,rollEncounter,NPC_SPOTS} from './encounters.js';
 export const CHUNK=32, WORLD_RADIUS=232;
 export function regionAt(x:number,z:number):Theme { const r=Math.hypot(x,z);return r<72?'garden':r<146?'foundry':'archive'; }
 export function mainPortals(seed:number):Portal[] {
@@ -40,7 +41,10 @@ export function generateChunk(seed:number,cx:number,cz:number):Chunk {
   pois.push({id:`poi:${cx}:${cz}`,x:qx,z:qz,kind,seed:hash(seed,'poi-content',cx,cz),title:kind==='archive'?'Полевой архив':kind==='camp'?'Тихая стоянка':'Сервисный ящик'});
  }
  if(cx===0&&cz===0)pois.push({id:'home',kind:'camp',x:0,z:3,seed,title:'Станция «Изобара»'});
- const protect=[...mainPortals(seed),finalPortal(seed),...portals,...pois,{x:0,z:0}];
+ const encounters:Encounter[]=fixedEncounters(seed).filter(e=>Math.floor(e.x/CHUNK)===cx&&Math.floor(e.z/CHUNK)===cz);
+ {const avoid=[...portals,...pois,...mainPortals(seed),finalPortal(seed),{x:0,z:0},...fixedEncounters(seed),...Object.values(NPC_SPOTS)];
+  const e=rollEncounter(seed,cx,cz,avoid,(x,z)=>roadDistance(x,z,seed));if(e)encounters.push(e);}
+ const protect=[...mainPortals(seed),finalPortal(seed),...portals,...pois,{x:0,z:0},...Object.values(NPC_SPOTS),...encounters.flatMap(e=>e.device?[e,e.device]:[e])];
  const props:Chunk['props']=[],obstacles:Obstacle[]=[];
  for(let i=0;i<70;i++){
   const x=x0+rng.range(1,31),z=z0+rng.range(1,31),r=Math.hypot(x,z);
@@ -51,7 +55,7 @@ export function generateChunk(seed:number,cx:number,cz:number):Chunk {
   props.push({x,z,kind,scale,rot,color});
   if(kind==='tree'||kind==='rock'||kind==='machine')obstacles.push({x,z,r:(kind==='rock'?.9:kind==='machine'?.9:.5)*scale,kind});
  }
- return {id,cx,cz,props,obstacles,portals,pois};
+ return {id,cx,cz,props,obstacles,portals,pois,encounters};
 }
 export class World {
  readonly seed:number;private chunks=new Map<string,Chunk>();readonly main:Portal[];
@@ -60,6 +64,8 @@ export class World {
  nearby(pos:Vec,r=1){const cx=Math.floor(pos.x/CHUNK),cz=Math.floor(pos.z/CHUNK),a:Chunk[]=[];for(let x=cx-r;x<=cx+r;x++)for(let z=cz-r;z<=cz+r;z++)a.push(this.chunk(x,z));return a;}
  portals(pos:Vec,r=1,final=false){const a=this.nearby(pos,r).flatMap(c=>c.portals);if(final)a.push(finalPortal(this.seed));return a;}
  pois(pos:Vec,r=1){return this.nearby(pos,r).flatMap(c=>c.pois);}
+ encounters(pos:Vec,r=1){return this.nearby(pos,r).flatMap(c=>c.encounters);}
+ encounter(id:string):Encounter|null{if(id==='road')return fixedEncounters(this.seed)[0];const p=id.split(':');if(p.length===3&&p[0]==='e'){const cx=Number(p[1]),cz=Number(p[2]);if(Number.isInteger(cx)&&Number.isInteger(cz)&&Math.abs(cx)<9&&Math.abs(cz)<9)return this.chunk(cx,cz).encounters.find(e=>e.id===id)??null;}return null;}
  getPortal(id:string):Portal|null {if(id==='final')return finalPortal(this.seed);if(id.startsWith('main:'))return this.main[Number(id.slice(5))-1]??null;const parts=id.split(':');if(parts.length===3&&parts[0]==='p'){const cx=Number(parts[1]),cz=Number(parts[2]);if(Number.isInteger(cx)&&Number.isInteger(cz)&&Math.abs(cx)<9&&Math.abs(cz)<9)return this.chunk(cx,cz).portals.find(p=>p.id===id)??null;}return null;}
  canWalk(x:number,z:number,r=.46){if(Math.hypot(x,z)>WORLD_RADIUS-r||Math.hypot(x+3,z+2)<r+1.3)return false;for(const c of this.nearby({x,z},1))for(const o of c.obstacles)if(Math.hypot(x-o.x,z-o.z)<r+o.r)return false;return true;}
  cacheSize(){return this.chunks.size;}

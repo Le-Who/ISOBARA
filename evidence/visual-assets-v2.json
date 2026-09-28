@@ -1,0 +1,124 @@
+{
+  "date": "2026-09-29",
+  "generator": "Codex built-in image_gen",
+  "method": "New transparent raster art based on existing ISOBARA item references; no existing image replaced. Stored source files are the shipped outputs. Procedural 3D counterparts and runtime effects are authored in src/render/.",
+  "assets": [
+    {
+      "file": "public/assets/inductor.png",
+      "width": 1332,
+      "height": 1181,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1015249,
+      "sha256": "759098ce435cc379273c7be0346e735c383370ea14f3d82ad9c54232ee65ae10",
+      "brief": "Ручной дуговой индуктор: медная U-образная скоба, бирюзовые катушки; прозрачный фон."
+    },
+    {
+      "file": "public/assets/strippers.png",
+      "width": 1331,
+      "height": 1181,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1065027,
+      "sha256": "c42c211ad3e7dcbaa1428d245fcbbe8653211b28f7a80d208ca544bd53da6e1e",
+      "brief": "Парные съёмники: два скрещённых латунных захвата с режущими зубцами; прозрачный фон."
+    },
+    {
+      "file": "public/assets/discs.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1697935,
+      "sha256": "4d98f4d0d148618d850f68741e7378f1ac3a043d2170e1d59918ee8349f2cda5",
+      "brief": "Два возвратных ветровых диска: кольцевые лопасти слоновой кости и фиолетовый свет; прозрачный фон."
+    },
+    {
+      "file": "public/assets/skill-lance.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1294523,
+      "sha256": "bd0a4238d414179618eb8d327201b282fc958a886ed971ded8c1aa1ccf44273b",
+      "brief": "Копьё тока: направленное бирюзовое электрическое остриё; прозрачный фон."
+    },
+    {
+      "file": "public/assets/skill-anchor.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1454202,
+      "sha256": "3f98c1994346528da408883ef831a2bf32766b52b632467659f4fb197b0bf094",
+      "brief": "Якорь давления: янтарная стягивающая волна и центральный механизм; прозрачный фон."
+    },
+    {
+      "file": "public/assets/skill-gust.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1683117,
+      "sha256": "1daa6cbb140655972a2f30e0fd6da5b614a31241b00d9f240378597834ddec1c",
+      "brief": "Порыв: направленный фиолетовый поток воздуха; прозрачный фон."
+    },
+    {
+      "file": "public/assets/npc-irma.png",
+      "width": 1199,
+      "height": 1312,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1901047,
+      "sha256": "261cddebd047897854239ee6433f59ec94b50b64d43ba2118722cb90fdfb3c1b",
+      "brief": "Ирма: инженер станции, охристый шарф, латунный визор, кремовый рабочий костюм и инструмент; прозрачный фон."
+    },
+    {
+      "file": "public/assets/npc-sa7.png",
+      "width": 1230,
+      "height": 1278,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1824696,
+      "sha256": "63f2b3f765b8792365557c4e85ad2cd1fdf57d5dc4fa279dfa06c4467d9353f6",
+      "brief": "СА-7: дружелюбный сервисный автомат на трёх опорах, кремовый корпус, латунные детали и мятный глаз; прозрачный фон."
+    },
+    {
+      "file": "public/assets/npc-lea.png",
+      "width": 1145,
+      "height": 1374,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 2117110,
+      "sha256": "91f993f066b62a6390c73dd8ece3266449201088e39cf0e4826a86a48aa13ab1",
+      "brief": "Лея: архивистка с фиолетовым визором, кремовым костюмом и полевым фолиантом; прозрачный фон."
+    }
+  ]
+}

@@ -20,7 +20,7 @@ export class Kit {
  ring(p,x,y,z,r,color=GOLD,tube=.04){const m=this.mesh(p,this.torus(r,tube),this.mat(color,.34,.34),x,y,z);m.rotation.x=-Math.PI/2;return m;}
  glyph(text,color='#e9dfc4',size=1.6){const canvas=document.createElement('canvas');canvas.width=512;canvas.height=96;const ctx=canvas.getContext('2d');ctx.font='500 30px Segoe UI, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=9;ctx.fillStyle=color;ctx.fillText(text,256,48);const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;texture.userData.owned=true;const material=new T.SpriteMaterial({map:texture,transparent:true,depthWrite:false,depthTest:false});const sprite=new T.Sprite(material);sprite.geometry.userData.shared=true;sprite.scale.set(size*4,size*.75,1);return sprite;}
  healthBar(group,y,width=1.3){const holder=new T.Group();holder.position.y=y;const bg=new T.Sprite(new T.SpriteMaterial({color:0x17262a,depthTest:false,transparent:true,opacity:.9}));bg.geometry.userData.shared=true;bg.scale.set(width,.10,1);holder.add(bg);const fill=new T.Sprite(new T.SpriteMaterial({color:0xeabb81,depthTest:false}));fill.scale.set(width*.96,.055,1);fill.position.z=.01;holder.add(fill);group.add(holder);holder.visible=false;return {holder,fill,width};}
- player(classId){
+ player(classId,family){
   const root=new T.Group(),accent=CLASSES[classId].color,limbs=[];
   this.disk(root,0,.04,0,.68,0x0c282b,.18);const marker=this.ring(root,0,.035,0,.66,accent,.023);marker.material=this.basic(accent,.8);marker.castShadow=false;
   for(const x of [-.17,.17]){const leg=new T.Group();leg.position.set(x,.67,0);this.mesh(leg,this.cyl(8),this.mat(DARK),0,-.22,0,.22,.45,.22);this.boxAt(leg,0,-.52,.08,.25,.20,.38,0x283733);root.add(leg);limbs.push(leg);}
@@ -31,15 +31,39 @@ export class Kit {
   const cape=this.mesh(root,capeGeo,this.basic(classId==='harvester'?0x72817c:classId==='lineman'?0x588c82:0x847894),0,1.39,-.33);cape.castShadow=true;
   const arms=[];for(const x of [-.47,.47]){const arm=new T.Group();arm.position.set(x,1.3,0);this.mesh(arm,this.cyl(8),this.mat(IVORY),0,-.22,.07,.22,.47,.22);this.mesh(arm,this.ball(0),this.mat(GOLD),0,-.43,.12,.135,.14,.135);root.add(arm);arms.push(arm);}
   const tool=new T.Group();tool.position.set(.47,.91,.25);root.add(tool);
-  if(classId==='harvester'){
+  if(family==='strippers'){
+   for(const x of [-.15,.15]){this.rod(tool,[x,0,0],[x,0,.80],.055,DARK);this.rod(tool,[x,0,.60],[x*1.9,0,1.02],.055,GOLD);this.mesh(tool,this.cone(5),this.mat(accent,.32,.28),x*1.9,0,1.08,.17,.40,.17).rotation.x=Math.PI/2;}
+   this.boxAt(tool,0,-.08,.18,.43,.16,.28,GOLD);
+  }else if(family==='inductor'){
+   this.boxAt(tool,0,0,.20,.40,.27,.42,DARK);for(const x of [-.24,.24]){this.rod(tool,[x,0,.28],[x,0,.86],.065,GOLD);this.mesh(tool,this.ball(0),this.mat(accent,.25,.1,accent),x,0,.89,.12,.12,.12);}for(let i=0;i<3;i++)this.mesh(tool,this.torus(.16+i*.026,.019),this.mat(accent,.3,.1,accent),0,0,.38+i*.13);
+  }else if(family==='discs'){
+   this.rod(tool,[0,0,0],[0,0,.58],.055,GOLD);for(const x of [-.23,.23]){const wheel=this.mesh(tool,this.torus(.28,.055),this.mat(accent,.35,.24),x,.03,.57);wheel.rotation.y=.25*x;this.mesh(tool,this.ball(0),this.mat(GOLD,.3,.4),x,.03,.57,.09,.09,.09);}this.boxAt(tool,0,-.09,.18,.32,.15,.33,DARK);
+  }else if(classId==='harvester'){
    this.rod(tool,[0,0,0],[0,0,.75],.07,DARK);for(const x of [-.13,.13]){this.rod(tool,[0,0,.38],[x,0,.63],.05,GOLD);this.rod(tool,[x,0,.63],[x,0,1.15],.045,accent);}this.boxAt(tool,0,0,.61,.4,.13,.16,GOLD);
   }else if(classId==='lineman'){
    const barrel=this.mesh(tool,this.cyl(8),this.mat(GOLD,.3,.4),0,0,.35,.19,.85,.19);barrel.rotation.x=Math.PI/2;for(let i=0;i<4;i++){const ring=this.mesh(tool,this.torus(.115,.025),this.mat(accent,.4,.1,accent),0,0,.12+i*.12);}
    this.boxAt(tool,0,-.08,.0,.16,.24,.25,DARK);
   }else{const orb=this.mesh(tool,this.ball(1),this.mat(accent,.3,.2,0x473854),0,.07,.3,.3,.3,.3);for(let i=0;i<3;i++){const a=i*Math.PI*2/3;this.rod(tool,[0,.07,.3],[Math.cos(a)*.55,.07+Math.sin(a)*.55,.3],.035,GOLD);}this.mesh(tool,this.torus(.38,.025),this.mat(GOLD,.3,.3),0,.07,.3);}
-  root.userData={limbs,arms,tool,cape,attack:0,oldX:0,oldZ:0,classId};return root;
+  root.userData={limbs,arms,tool,cape,attack:0,oldX:0,oldZ:0,classId,family};return root;
  }
- enemy(kind,boss){
+ npc(id){
+  if(id==='sa7'){
+   const root=new T.Group();this.disk(root,0,.04,0,.72,0x0c282b,.18);
+   for(let i=0;i<3;i++){const a=i*Math.PI*2/3,x=Math.sin(a),z=Math.cos(a);this.rod(root,[x*.28,.75,z*.28],[x*.53,.05,z*.53],.075,GOLD);this.mesh(root,this.ball(0),this.mat(DARK),x*.53,.10,z*.53,.12,.11,.12);}
+   this.mesh(root,this.cyl(8),this.mat(IVORY),0,.98,0,.83,.78,.67);this.ring(root,0,1.36,0,.38,GOLD,.04);
+   this.mesh(root,this.ball(1),this.mat(0x8ec5ae,.4,.16,0x4a806b),0,1.67,.10,.33,.34,.30);this.mesh(root,this.ball(0),this.mat(0xdbf8e7,.2,.1,0x95d7bc),0,1.67,.38,.14,.13,.08);
+   for(const x of [-.50,.50]){this.rod(root,[x,1.15,0],[x*1.3,.72,.35],.07,GOLD);this.mesh(root,this.ball(0),this.mat(DARK),x*1.3,.70,.36,.13,.14,.13);}
+   this.rod(root,[0,1.94,0],[0,2.24,0],.035,GOLD);this.mesh(root,this.ball(0),this.mat(0x8ee1be,.3,.1,0x8ee1be),0,2.28,0,.09,.10,.09);return root;
+  }
+  const root=this.player(id==='irma'?'harvester':'aerologist');const tool=root.userData.tool;this.release(tool);
+  if(id==='irma'){
+   this.boxAt(root,0,1.02,.34,.68,.68,.09,0x9c7145);this.boxAt(root,0,1.70,.32,.56,.18,.08,0x8d6942);this.rod(root,[.55,.83,.20],[.77,.83,.95],.055,GOLD);this.mesh(root,this.torus(.18,.055),this.mat(GOLD,.35,.4),.77,.84,1.01);
+  }else{
+   this.boxAt(root,0,1.03,.36,.66,.81,.07,0x786891);this.boxAt(root,0,1.65,.34,.55,.16,.06,0xb6a0db);this.boxAt(root,.59,.83,.40,.40,.09,.54,0xede1c4);this.rod(root,[.42,.79,.68],[.78,.79,.68],.018,GOLD);
+  }
+  return root;
+ }
+ enemy(kind,boss,elite=false){
   const root=new T.Group(),limbs=[],rotors=[];const hot=this.mat(0xffad75,.4,.12,0xee713b),brass=this.mat(GOLD,.38,.4),shell=this.mat(IVORY,.65),dark=this.mat(DARK,.7,.12);
   this.disk(root,0,.035,0,kind==='boss'?1.7:.8,0x142726,.22);
   const leg=(x,z,scale=1)=>{const pivot=new T.Group();pivot.position.set(x,.6*scale,z);this.rod(pivot,[0,0,0],[x*.5,-.35*scale,z*.4],.08*scale,GOLD);this.rod(pivot,[x*.5,-.35*scale,z*.4],[x*.7,-.6*scale,z*.7],.06*scale,DARK);root.add(pivot);limbs.push(pivot);};
@@ -106,6 +130,7 @@ export class Kit {
   }
   const wind=this.ring(root,0,.09,0,kind==='boss'?2.1:.95,0xffb288,.035);wind.material=this.basic(0xff956a,.85);wind.visible=false;wind.castShadow=false;
   const health=kind==='boss'?null:this.healthBar(root,kind==='mortar'?2.9:2.45,1.35);
+  if(elite){for(const x of [-.55,.55]){this.mesh(root,this.cone(5),this.mat(0xa878bb,.38,.25),x,2.02,0,.30,.69,.30);this.rod(root,[x*.65,1.48,.25],[x,2.17,0],.04,GOLD);}this.mesh(root,this.ball(0),this.mat(0xebcaff,.26,.15,0xa567c6),0,2.30,.07,.21,.22,.21);}
   root.userData={...root.userData,limbs,rotors,health,wind,flash:0,oldX:0,oldZ:0,base:1};return root;
  }
  portal(portal,cleared=false){
@@ -150,6 +175,15 @@ export class Kit {
   }
   return root;
  }
+ beacon(kind){const g=new T.Group(),color=kind==='named'?0xd58cff:kind==='meteo'?0xffa15c:0xffc36b;
+  const ground=new T.Mesh(this.geo('circle',()=>new T.CircleGeometry(1,48)),new T.MeshBasicMaterial({color,transparent:true,opacity:.26,depthWrite:false,side:T.DoubleSide}));ground.rotation.x=-Math.PI/2;ground.position.y=.06;ground.scale.setScalar(2.6);g.add(ground);
+  this.ring(g,0,.09,0,2.6,GOLD,.05);this.rod(g,[0,0,0],[0,3.1,0],.05,GOLD);
+  if(kind==='meteo'){for(let i=0;i<3;i++){const a=i*Math.PI*2/3,x=Math.sin(a),z=Math.cos(a);this.rod(g,[x*1.55,.1,z*1.55],[x*.65,2.18,z*.65],.06,IVORY);this.mesh(g,this.ball(0),this.mat(color,.35,.1,color),x*.65,2.18,z*.65,.14,.14,.14);}this.mesh(g,this.torus(.72,.055),this.mat(GOLD,.3,.3),0,2.18,0).rotation.x=Math.PI/2;}
+  if(kind==='named'){for(let i=0;i<5;i++){const a=i*Math.PI*2/5,x=Math.sin(a),z=Math.cos(a);this.rod(g,[x*1.2,.1,z*1.2],[x*.45,2.30,z*.45],.045,GOLD);this.mesh(g,this.cone(5),this.mat(0x9e72b6,.35,.2),x*.45,2.48,z*.45,.20,.54,.20);}this.mesh(g,this.ball(1),this.mat(color,.35,.15,color),0,2.42,0,.35,.42,.35);}
+  const lamp=new T.Mesh(this.ball(1),new T.MeshBasicMaterial({color}));lamp.position.set(0,3.3,0);lamp.scale.setScalar(.27);g.add(lamp);g.userData={lamp,ground};return g;}
+ node(){const g=new T.Group();this.boxAt(g,0,.6,0,.9,1.2,.6,DARK);this.boxAt(g,0,.95,.32,.62,.4,.05,IVORY);this.rod(g,[.55,0,0],[.55,1.7,0],.03,GOLD);
+  const lamp=new T.Mesh(this.ball(1),new T.MeshBasicMaterial({color:0xffc36b}));lamp.position.set(0,1.45,0);lamp.scale.setScalar(.17);g.add(lamp);g.userData={lamp};return g;}
+ npcMark(color){return new T.Mesh(new T.OctahedronGeometry(.26),new T.MeshBasicMaterial({color}));}
  release(root){root.traverse(o=>{if(o.isInstancedMesh)o.dispose();if(o.geometry&&!o.geometry.userData.shared)o.geometry.dispose();if(o.material)for(const m of Array.isArray(o.material)?o.material:[o.material])if(!m.userData.shared){for(const key of ['map','alphaMap'])if(m[key]?.userData.owned)m[key].dispose();m.dispose();}});root.removeFromParent();}
  dispose(){for(const g of this.geos.values())g.dispose();for(const m of this.materials.values())m.dispose();for(const t of this.textures)t.dispose();this.geos.clear();this.materials.clear();}
 }
