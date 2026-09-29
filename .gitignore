@@ -21,6 +21,19 @@ venv/
 /test-results/
 /output/releases/
 
+# Evidence keeps compact reports and asset provenance, not every run artifact.
+/evidence/**
+!/evidence/**/
+!/evidence/**/*.md
+!/evidence/**/*.json
+!/evidence/**/*.py
+!/evidence/asset-audit/**
+/evidence/**/__pycache__/
+/evidence/**/*.py[cod]
+/evidence/fixtures/
+/evidence/**/browser-export.json
+/evidence/**/state.json
+
 # Local experiments and independent project copies
 /scratch/
 /revisions/
@@ -30,7 +43,7 @@ venv/
 .env.*
 !.env.example
 
-# Package-manager diagnostics (evidence/*.log remains versioned)
+# Package-manager diagnostics
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -44,5 +57,8 @@ pnpm-debug.log*
 Thumbs.db
 Desktop.ini
 
-# dist/, public/assets/, output/assets/ and evidence/ are project deliverables.
-# Keep them available to Git; local ZIP packages under output/releases/ are reproducible.
+# dist/, public/assets/ and output/assets/ are project deliverables.
+# Evidence uses the selective policy above; local release ZIPs are reproducible.
+
+# Private optional snapshot service data
+/output/cloud-snapshots/

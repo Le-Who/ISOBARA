@@ -2,7 +2,7 @@ import type {GameState,Portal,Vec,InputFrame,Stats,Enemy,Layout,Projectile,Hazar
 import {World,CHUNK} from '../world/world.js';
 import {generateDungeon} from '../world/dungeon.js';
 import {canWalk,move,lineClear,flowField,nextOnFlow,nearestIndex,navPoint,pathTo} from '../world/navigation.js';
-import {stats,levelInfo,restorePlayer,instantiateEnemies,enemyNumbers,createReward,applyReward,makeItem,giveItem} from './progression.js';
+import {stats,levelInfo,restorePlayer,instantiateEnemies,enemyNumbers,createReward,applyReward,makeItem,giveItem,salvageValue} from './progression.js';
 import {RNG,hash,clamp,norm,dist,segmentDistance} from './math.js';
 import {CLASSES,BOSSES,LORE} from './content.js';
 import {SAFE_RADIUS,AGGRO_RADIUS,LEASH_RADIUS,SPAWN_RADIUS,NPC_SPOTS,unitPositions} from '../world/encounters.js';
@@ -18,7 +18,7 @@ export class Simulation {
  time=0;private seq=1;private rng:RNG;private attackQueue:{time:number;ax:number;az:number}[]=[];
  worldEnemies:Enemy[]=[];awake=new Set<string>();spawned=new Map<string,Encounter>();momentum=0;private momentumTimer=0;private comboStep=0;private comboTimer=0;private encTimer=0;refusal='';
  private flow:Int32Array|null=null;private flowTimer=0;private exploreTimer=0;private stormTimer=6;private shotCount=0;private aimDistance=10;
- constructor(state:GameState){this.state=state;this.world=new World(state.seed);this.rng=new RNG(state.run?.rng??hash(state.seed,'combat'));if(state.run)this.layout=generateDungeon(state.run.portal,state.run.seed);}
+ constructor(state:GameState){this.state=state;this.world=new World(state.seed);this.rng=new RNG(state.run?.rng??hash(state.seed,'combat'));if(state.run){this.layout=generateDungeon(state.run.portal,state.run.seed);for(const e of state.run.enemies)if(!e.dead&&(e.windup>0||e.charge!==0)){e.windup=0;e.charge=0;e.timer=Math.max(e.timer,.9);}}}
  get p(){return this.state.player;}
  get st(){return stats(this.state);}
  emit(type:GameEvent['type'],p:Vec=this.p,more:Partial<GameEvent>={}){if(type==='save'&&this.spawned.size)this.flushEncounters();this.events.push({type,x:p.x,z:p.z,...more});if(this.events.length>256)this.events.shift();}
@@ -69,7 +69,7 @@ export class Simulation {
   if(this.state.collected.includes(p.id))return null;this.state.collected.push(p.id);
   if(p.kind==='archive'){const index=hash(p.seed,'lore')%LORE.length,id=`lore:${index}`;if(!this.state.journal.includes(id))this.state.journal.push(id);this.state.shards+=12;this.grantXp(25);this.emit('loot',p);this.emit('save');return `${LORE[index][0]}\n${LORE[index][1]}`;}
   const tier=clamp(Math.floor(Math.hypot(p.x,p.z)/52)+1,1,Math.min(5,Math.max(1,this.state.stats.bestTier+1)));
-  const item=makeItem(hash(p.seed,'cache'),tier,this.p.classId,`${p.id}:item`);giveItem(this.state,item);this.state.shards+=6;this.emit('loot',p);this.emit('save');return `Найдено: ${item.name}. ${this.state.inventory.length>=24?'Проверьте снаряжение и хранилище.':'Предмет добавлен в снаряжение.'}`;
+  const item=makeItem(hash(p.seed,'cache'),tier,this.p.classId,`${p.id}:item`);const delivery=giveItem(this.state,item);this.state.shards+=6;this.emit('loot',p);this.emit('save');return `Найдено: ${item.name}. ${delivery==='shards'?`Хранилище заполнено: получено ${salvageValue(item)} деталей вместо предмета.`:delivery==='mail'?'Предмет добавлен в хранилище.':'Предмет добавлен в снаряжение.'}`;
  }
  rest(roomId:number){const r=this.layout?.rooms.find(r=>r.id===roomId);if(!r||r.role!=='rest'||!this.state.run||this.state.run.restUsed.includes(roomId)||dist(this.p,r)>4.5)return false;this.state.run.restUsed.push(roomId);this.p.hp=Math.min(this.st.hp,this.p.hp+this.st.hp*.4);this.p.potions=Math.min(this.st.potionCount,this.p.potions+1);this.p.energy=100;this.emit('heal',this.p,{value:Math.round(this.st.hp*.4)});this.emit('toast',this.p,{text:'Тихая терраса: восстановлено здоровье и один ремкомплект.'});this.emit('save');return true;}
  private valid(x:number,z:number,r=.46){return this.layout?canWalk(this.layout,x,z,r):this.world.canWalk(x,z,r);}
@@ -332,7 +332,7 @@ export class Simulation {
   const cls=s.player.classId,alt=s.blueprints.includes(ALT_FAMILY[cls])?.5:0;
   if(how==='kill'&&(enc.kind==='named'||enc.kind==='meteo'||hash(enc.seed,'patrol-loot')%100<40)){
    const item=makeItem(hash(enc.seed,'enc-loot'),enc.kind==='named'?Math.min(5,tier+1):tier,cls,`enc:${s.seed}:${enc.id}:loot`,enc.kind==='named'?{bonus:30,pity:true,slot:'instrument',altChance:alt}:{bonus:6,altChance:alt});
-   if(giveItem(s,item))extra=` Найдено: ${item.name}.`;
+   const delivery=giveItem(s,item);if(delivery)extra=delivery==='shards'?` Хранилище заполнено: ${item.name} превращён в ${salvageValue(item)} деталей.`:` Найдено: ${item.name}.${delivery==='mail'?' Предмет в хранилище.':''}`;
   }
   this.emit('toast',enc,{text:`${enc.title}: ${how==='disable'?'питание отключено':'узел стабилизирован'}. +${shards} деталей.${extra}`});this.emit('loot',enc);this.emit('save');
  }

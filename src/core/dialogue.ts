@@ -1,7 +1,7 @@
 // NPC-01: three characters with memory of the hero's actions. State is compact (met + heard ids);
 // a read line never replaces completing the game task, and every reward is guarded by a persistent flag.
 import type {GameState,NpcState} from './types.js';
-import {levelInfo,makeItem,giveItem} from './progression.js';
+import {levelInfo,makeItem,giveItem,salvageValue} from './progression.js';
 import {ALT_FAMILY,FAMILIES} from './weapons.js';
 import {LORE} from './content.js';
 import {hash} from './math.js';
@@ -48,7 +48,7 @@ export function talk(s:GameState,id:string):DialogueView|null{
 export function choose(s:GameState,id:string,choice:string):DialogueView|null{
  const before=talk(s,id);if(!before)return null;const c=before.choices.find(x=>x.id===choice);if(!c||c.disabled)return before;
  let toast:string|undefined,extra:string|undefined;
- if(id==='irma'&&choice==='blueprint'){const alt=ALT_FAMILY[s.player.classId];if(!s.blueprints.includes(alt)){s.blueprints.push(alt);const item=makeItem(hash(s.seed,'blueprint',alt),Math.max(1,s.stats.bestTier),s.player.classId,`bp:${s.seed}:${alt}`,{slot:'instrument',family:alt,bonus:8});item.rarity=Math.max(2,item.rarity) as 2|3|4;giveItem(s,item);toast=`Чертёж получен: ${FAMILIES[alt].name}. Инструмент добавлен в снаряжение.`;extra=`«Держи. ${FAMILIES[alt].tradeoff} Если сломаешь — собери новый в мастерской: чертёж остаётся у тебя.»`;}}
+ if(id==='irma'&&choice==='blueprint'){const alt=ALT_FAMILY[s.player.classId];if(!s.blueprints.includes(alt)){s.blueprints.push(alt);const item=makeItem(hash(s.seed,'blueprint',alt),Math.max(1,s.stats.bestTier),s.player.classId,`bp:${s.seed}:${alt}`,{slot:'instrument',family:alt,bonus:8});item.rarity=Math.max(2,item.rarity) as 2|3|4;const delivery=giveItem(s,item);toast=`Чертёж получен: ${FAMILIES[alt].name}. ${delivery==='shards'?`Хранилище заполнено: за инструмент получено ${salvageValue(item)} деталей.`:delivery==='mail'?'Инструмент добавлен в хранилище.':'Инструмент добавлен в снаряжение.'}`;extra=`«Держи. ${FAMILIES[alt].tradeoff} Если сломаешь — собери новый в мастерской: чертёж остаётся у тебя.»`;}}
  else if(id==='irma'&&choice==='teach'){mark(s,'irma','taught');toast='Открыто второе умение. Переключать умения можно в мастерской станции.';extra='«Умение — это не ещё одна кнопка, а другой способ решать бой. Пробуй обе, пока не поймёшь, какая твоя.»';}
  else if(id==='irma'&&choice==='about')extra='«Станция «Изобара» — последний прибор, который не забыл про завтра. Пока в мастерской горит лампа, в мире есть кому чинить погоду.»';
  else if(id==='sa7'&&choice==='gift'){mark(s,'sa7','gift');s.shards+=15;toast='+15 деталей от СА-7.';}

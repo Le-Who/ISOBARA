@@ -1,16 +1,19 @@
+import {regionAt} from './world/world.js';
+import {randomCode,deriveIds,encryptText,decryptText,snapshotRequest,endpointURL} from './core/cloud.js';
 import {GameUI} from './ui/ui.js';
 import {GameView} from './render/view.js';
 import {Simulation} from './core/simulation.js';
 import {Input} from './core/input.js';
 import {AudioSystem} from './core/audio.js';
 import {SaveStore} from './core/storage.js';
-import {newGame,equipItem,salvage,favorite,respec,spendRespec,craftItem,craftFamily,restorePlayer} from './core/progression.js';
-import {DEFAULT_SETTINGS,CLASSES,ACTION_NAMES} from './core/content.js';
+import {newGame,equipItem,salvage,favorite,respec,spendRespec,craftItem,craftFamily,restorePlayer,salvageValue,craftSlot,refitItem,retuneItem,salvageBulk,type BulkPreview,type InventoryFilter,hasItemSpace} from './core/progression.js';
+import {DEFAULT_SETTINGS,CLASSES,ACTION_NAMES,VERSION} from './core/content.js';
 import {envelope,importText,validateSettings} from './core/validation.js';
 import {keyLabel} from './ui/assets.js';
 import {hash,clamp} from './core/math.js';
 import type {GameState,Settings,Action,Portal,Poi,GameEvent,InputFrame} from './core/types.js';
 class App {
+ private pendingBulk:BulkPreview|null=null;private cloudEndpoint='';private cloudBusy=false;
  ui=new GameUI();store=new SaveStore();settings:Settings=structuredClone(DEFAULT_SETTINGS);view!:GameView;sim!:Simulation;input!:Input;audio=new AudioSystem(this.settings);
  saved:GameState|null=null;backup:GameState|null=null;active=false;busy=false;volatile=false;contextLost=false;pendingImport:GameState|null=null;
  private now=0;private accumulator=0;private lastRender=0;private lastHud=0;private lastSave=0;private saveRequested=false;private saving=false;private lastError=0;private fpsFrames=0;private fpsTime=0;private lastFoot={x:0,z:0};private queued={skill:false,burst:false,dash:false,heal:false};
@@ -31,7 +34,7 @@ class App {
   window.addEventListener('error',e=>{if(!(e instanceof ErrorEvent))return;this.audio.pause(true);this.input.reset();this.ui.message('Прогноз остановлен', 'Произошла ошибка выполнения. Экспортируйте текущее состояние и перезагрузите игру.\n\n'+e.message,[{label:'Экспорт прогресса',action:'export'},{label:'Перезагрузить',action:'reload',style:'secondary'}],true);void this.persist(true);});
   window.addEventListener('isobara-context-lost',()=>{this.contextLost=true;this.autoPause('Графический контекст потерян. Прогресс можно экспортировать.');this.ui.banner('Графика временно недоступна. Сохраните прогресс и перезагрузите игру.');void this.persist(true);});
   window.addEventListener('isobara-context-restored',()=>{this.contextLost=false;this.ui.toast('Графический контекст восстановлен.');});
-  if(__DEV__)window.__isobara=Object.freeze({snapshot:()=>structuredClone(this.sim.snapshot()),project:(x:number,z:number,y=1.5)=>this.view.project(x,z,y),pathTo:(target:{x:number;z:number})=>this.sim.navigationPath(target),camera:()=>({yaw:this.view.yaw,distance:this.view.distance}),metrics:()=>({...this.view.metrics,worldCache:(this.sim.world as any).cache?.size??null,enemyViews:this.view.enemyViews.size,particles:this.view.particleData.length,hazards:this.view.hazardViews.size,fx:this.view.fx.length,modal:this.ui.modal,busy:this.busy,saveReadOnly:this.store.readOnly,audio:this.audio.status()}),version:'2.0.0'});
+  if(__DEV__)window.__isobara=Object.freeze({snapshot:()=>structuredClone(this.sim.snapshot()),project:(x:number,z:number,y=1.5)=>this.view.project(x,z,y),pathTo:(target:{x:number;z:number})=>this.sim.navigationPath(target),camera:()=>({yaw:this.view.yaw,distance:this.view.distance}),metrics:()=>({...this.view.metrics,worldCache:(this.sim.world as any).cache?.size??null,enemyViews:this.view.enemyViews.size,particles:this.view.particleData.length,hazards:this.view.hazardViews.size,fx:this.view.fx.length,modal:this.ui.modal,busy:this.busy,saveReadOnly:this.store.readOnly,audio:this.audio.status()}),version:VERSION});
   requestAnimationFrame(t=>this.loop(t));
   if(this.store.readOnly)this.ui.message('Игра уже открыта','Другая вкладка владеет этим сохранением. Здесь запись заблокирована, чтобы вкладки не перезаписали друг друга. Закройте другую вкладку и перезагрузите эту.',[{label:'Перезагрузить',action:'reload'}],true);
   else if(storageError)this.ui.message('Хранилище недоступно',storageError+'\n\nВременный сеанс не сохраняется автоматически. Его можно экспортировать вручную.',[{label:'Перезагрузить',action:'reload'},{label:'Временный сеанс',action:'volatile',style:'secondary'}],true);
@@ -56,7 +59,7 @@ class App {
    if(this.fpsTime>1){this.view.metrics.fps=this.fpsFrames/this.fpsTime;this.fpsFrames=0;this.fpsTime=0;}
   }
   if(this.active&&now-this.lastHud>95){this.ui.update(this.sim,this.settings);this.lastHud=now;}
-  if(!paused)this.audio.tick(!!this.sim.state.run);this.input.endFrame();requestAnimationFrame(t=>this.loop(t));
+  if(!paused){const threat=this.sim.state.run?this.sim.enemies().some(e=>!e.dead&&Math.hypot(e.x-this.sim.p.x,e.z-this.sim.p.z)<22&&(e.kind!=='boss'||!this.sim.bossLocked())):this.sim.inCombat();this.audio.tick(threat,this.sim.layout?.theme??regionAt(this.sim.p.x,this.sim.p.z),this.sim.state.seals.length);}this.input.endFrame();requestAnimationFrame(t=>this.loop(t));
  }
  private handleKeys(){
   if(this.input.take('Escape')){if(this.ui.modal){if(this.ui.closable)this.closeModal();}else if(this.active)this.openPause();}
@@ -108,6 +111,23 @@ class App {
   if(action==='setting'){const input=el as HTMLInputElement,key=input.dataset.setting!;const val=input.type==='checkbox'?input.checked:key==='quality'?input.value:Number(input.value);this.settings=validateSettings({...this.settings,[key]:val});const label=document.getElementById('label-'+key);if(label)label.textContent=key==='camera'?Number(val).toFixed(1)+'×':Math.round(Number(val)*100)+'%';this.applySettings();if(!this.volatile)await this.store.saveSettings(this.settings);return;}
   if(action.startsWith('bind:')){const key=action.slice(5) as Action;el.classList.add('listening');el.textContent='Нажмите…';this.input.reset();this.input.capture=code=>{if(code){const proposed={...this.settings.bindings},old=proposed[key],other=(Object.keys(proposed) as Action[]).find(k=>proposed[k]===code);if(other)proposed[other]=old;proposed[key]=code;const next=validateSettings({...this.settings,bindings:proposed});if(next.bindings[key]!==code)this.ui.toast('Эта клавиша зарезервирована браузером или не поддерживается.');this.settings=next;this.applySettings();void this.store.saveSettings(this.settings).catch(()=>{});}this.ui.showSettings(this.settings);};return;}
   if(action==='reset-bindings'){this.settings.bindings=structuredClone(DEFAULT_SETTINGS.bindings);this.applySettings();this.ui.showSettings(this.settings);if(!this.volatile)await this.store.saveSettings(this.settings);return;}
+  if(action==='cloud'){if(this.cloudBusy)return;this.input?.reset();this.audio.pause(true);this.ui.showCloud(this.cloudEndpoint,!!(this.active||this.saved||this.backup));return;}
+  if(action==='cloud-upload'||action==='cloud-download'){
+   if(this.cloudBusy)return;let endpoint:string;try{endpoint=endpointURL((document.getElementById('cloud-endpoint') as HTMLInputElement).value);}catch(e){this.ui.toast((e as Error).message,true);return;}
+   const enteredCode=(document.getElementById('cloud-code') as HTMLInputElement).value;this.cloudEndpoint=endpoint;this.cloudBusy=true;
+   this.ui.message('Связываемся с сервисом','Локальный слот не заменяется. Ожидание — до 15 секунд.',[],true);
+   try{
+    if(action==='cloud-upload'){
+     const state=this.active?this.sim.state:this.saved??this.backup;if(!state)throw new Error('Нет прогресса для копирования.');
+     if(this.active)this.sim.flushEncounters();const text=JSON.stringify(envelope(state));
+     const code=await randomCode(),{id,key}=await deriveIds(code),blob=await encryptText(key,text);
+     const result=await snapshotRequest(endpoint,id,blob);if(result?.ok!==true)throw new Error('Сервис не подтвердил запись копии.');this.ui.showCloudReceipt(endpoint,code);
+    }else{
+     const {id,key}=await deriveIds(enteredCode),blob=await snapshotRequest(endpoint,id),state=importText(await decryptText(key,blob));
+     this.pendingImport=state;this.ui.message('Заменить локальный прогноз?',`${CLASSES[state.player.classId].name} · контуры ${state.seals.length}/5 · мир ${state.seed}.\n\nКопия расшифрована и проверена. Сначала можно экспортировать текущий слот.`,[{label:'Загрузить эту копию',action:'apply-import'},{label:'Экспорт текущего',action:'export',style:'secondary'},{label:'Отмена',action:'close',style:'quiet'}]);
+    }
+   }catch(e){this.ui.showCloud(endpoint,!!(this.active||this.saved||this.backup));this.ui.toast((e as Error).message,true);}finally{this.cloudBusy=false;}return;
+  }
   if(action==='export'){const state=this.active?this.sim.state:this.saved??this.backup;if(!state){this.ui.toast('Сначала начните путь или загрузите сохранение.');return;}const blob=new Blob([JSON.stringify(envelope(state),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`Isobara-save-${state.seed}-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);this.ui.toast('Файл сохранения подготовлен.');return;}
   if(action==='import'){const input=document.createElement('input');input.type='file';input.accept='.json,application/json';input.onchange=async()=>{const file=input.files?.[0];if(!file)return;try{if(file.size>6_100_000)throw new Error('Сохранение превышает 6 МБ.');const state=importText(await file.text());this.pendingImport=state;this.input.reset();this.ui.message('Заменить сохранение?',`${CLASSES[state.player.classId].name} · контуры ${state.seals.length}/5 · мир ${state.seed}.\n\nТекущий слот будет заменён проверенным файлом. Перед заменой можно экспортировать текущую игру.`,[{label:'Загрузить этот прогноз',action:'apply-import'},{label:'Экспорт текущего',action:'export',style:'secondary'},{label:'Отмена',action:'close',style:'quiet'}]);this.audio.pause(true);}catch(e){this.ui.toast('Импорт отменён: '+(e as Error).message,true);}};input.click();return;}
   if(action==='apply-import'&&this.pendingImport){if(this.active)await this.persist(true);if(!this.volatile)await this.store.write(this.pendingImport);const s=this.pendingImport;this.pendingImport=null;this.saved=structuredClone(s);await this.startPlaying(s,true);return;}
@@ -129,9 +149,14 @@ class App {
   if(action.startsWith('item:')){this.ui.selectedItem=action.slice(5);this.ui.showInventory(this.sim.state);return;}
   if(action.startsWith('bag-tab:')){this.ui.inventoryTab=action.slice(8) as 'bag'|'mail';this.ui.showInventory(this.sim.state);return;}
   if(action.startsWith('sort:')){const sort=action.slice(5);if(sort==='new'||sort==='tier'||sort==='rarity'){this.ui.inventorySort=sort;this.ui.showInventory(this.sim.state);}return;}
+  if(action.startsWith('filter:')){const slot=action.slice(7);if(['all','instrument','shell','relic'].includes(slot)){this.ui.inventoryFilter=slot as InventoryFilter;this.ui.selectedItem='';this.ui.showInventory(this.sim.state);}return;}
+  if(action.startsWith('bulk-preview:')){if(this.sim.inCombat()){this.ui.toast('Разбор недоступен под ударом.',true);return;}this.pendingBulk=this.ui.showBulk(this.sim.state,Number(action.slice(13)));return;}
+  if(action==='bulk-confirm'){const preview=this.pendingBulk;this.pendingBulk=null;if(!preview||this.sim.inCombat())return;const result=salvageBulk(this.sim.state,preview);if(result){await this.persist(true);this.ui.toast(`Разобрано: ${result.count}. Получено деталей: ${result.shards}.`);}else this.ui.toast('Список вещей изменился. Откройте предпросмотр снова.');this.ui.selectedItem='';this.ui.showInventory(this.sim.state);return;}
+  if(action.startsWith('craft-slot:')){if(this.sim.inCombat())return;const item=craftSlot(this.sim.state,action.slice(11) as any);if(item){await this.persist(true);this.ui.selectedItem=item.id;this.ui.showInventory(this.sim.state);this.ui.toast('Собран предмет: '+item.name);}return;}
+  if(action.startsWith('refit:')||action.startsWith('retune:')){if(this.sim.inCombat())return;const item=action.startsWith('refit:')?refitItem(this.sim.state,action.slice(6)):retuneItem(this.sim.state,action.slice(7),el.dataset.effect as any);if(item){await this.persist(true);this.ui.showInventory(this.sim.state);}return;}
   if(action.startsWith('fav:')){if(favorite(this.sim.state,action.slice(4))){await this.persist(true);this.ui.showInventory(this.sim.state);}return;}
   if(action.startsWith('equip:')){if(this.sim.inCombat()){this.ui.toast('Смена снаряжения невозможна под ударом.',true);return;}if(equipItem(this.sim.state,action.slice(6))){await this.persist(true);this.ui.showInventory(this.sim.state);}return;}
-  if(action.startsWith('salvage-confirm:')){const id=action.slice(16),item=[...this.sim.state.inventory,...this.sim.state.mailbox].find(i=>i.id===id);if(this.sim.inCombat()){this.ui.toast('Разбор недоступен под ударом.',true);return;}if(item&&!item.fav)this.ui.message('Разобрать предмет?',`${item.name}\n\nВы получите ${item.rarity*item.tier*3} деталей. Разбор необратим. Экипированный и избранный предмет разобрать нельзя.`,[{label:'Разобрать',action:'salvage:'+id,style:'danger'},{label:'Оставить',action:'inventory',style:'secondary'}]);return;}
+  if(action.startsWith('salvage-confirm:')){const id=action.slice(16),item=[...this.sim.state.inventory,...this.sim.state.mailbox].find(i=>i.id===id);if(this.sim.inCombat()){this.ui.toast('Разбор недоступен под ударом.',true);return;}if(item&&!item.fav)this.ui.message('Разобрать предмет?',`${item.name}\n\nВы получите ${salvageValue(item)} деталей. Разбор необратим. Экипированный и избранный предмет разобрать нельзя.`,[{label:'Разобрать',action:'salvage:'+id,style:'danger'},{label:'Оставить',action:'inventory',style:'secondary'}]);return;}
   if(action.startsWith('salvage:')){if(this.sim.inCombat()){this.ui.toast('Разбор недоступен под ударом.',true);return;}if(salvage(this.sim.state,action.slice(8))){this.ui.selectedItem='';await this.persist(true);}this.ui.showInventory(this.sim.state);return;}
   if(action==='respec-confirm'){this.ui.message('Перенастроить профиль?','Все вложенные ранги вернутся точками настройки. Потратить их можно на доступные вашей специализации улучшения. Опыт и снаряжение не изменятся.',[{label:'Перенастроить',action:'respec'},{label:'Оставить как есть',action:'upgrades',style:'secondary'}]);return;}
   if(action==='respec'){if(respec(this.sim.state))await this.persist(true);this.ui.showUpgrades(this.sim.state);return;}
@@ -156,7 +181,7 @@ class App {
    finally{this.ui.transition(false);this.busy=false;}return;
   }
   if(action.startsWith('reward-select:')){this.ui.selectedReward=Number(action.slice(14));this.ui.showReward(this.sim.state);return;}
-  if(action.startsWith('claim:')){const index=Number(action.slice(6)),previous=structuredClone(this.sim.state);this.busy=true;try{if(!this.sim.claim(index))return;if(!await this.persist(true)&&!this.volatile){this.sim=new Simulation(previous);this.view.setSimulation(this.sim);this.ui.showReward(previous);return;}const phase=this.sim.state.phase;this.sim.drain();this.view.rebuild();this.ui.updateDock(this.sim.state,this.settings);if(phase==='epilogue')this.ui.showEpilogue(this.sim.state);else{this.ui.forceClose();this.audio.pause(false);this.audio.sfx('level');this.ui.toast('Улучшение закреплено. Не забудьте экипировать добычу.');}}finally{this.busy=false;}return;}
+  if(action.startsWith('claim:')){const index=Number(action.slice(6)),previous=structuredClone(this.sim.state);this.busy=true;try{if(!this.sim.claim(index))return;if(!await this.persist(true)&&!this.volatile){this.sim=new Simulation(previous);this.view.setSimulation(this.sim);this.ui.showReward(previous);return;}const phase=this.sim.state.phase;this.sim.drain();this.view.rebuild();this.ui.updateDock(this.sim.state,this.settings);if(phase==='epilogue')this.ui.showEpilogue(this.sim.state);else{this.ui.forceClose();this.audio.pause(false);this.audio.sfx(this.sim.state.seals.length>previous.seals.length?'restore':'level');this.ui.toast(hasItemSpace(previous)?'Улучшение закреплено. Не забудьте экипировать добычу.':'Улучшение закреплено. Хранилище заполнено: за предмет получены детали.');}}finally{this.busy=false;}return;}
   if(action==='respawn'){this.sim.respawn();return;}
   if(action==='continue-ending'){this.sim.continueAfterEnding();return;}
   if(action==='home'){this.sim.goHome();return;}

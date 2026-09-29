@@ -31,12 +31,19 @@ export function makeItem(seed:number,tier:number,classId:ClassId,id:string,optio
 }
 export function equippedItems(s:GameState){return Object.fromEntries(Object.entries(s.equipment).map(([k,id])=>[k,s.inventory.find(i=>i.id===id)]));}
 export function equipItem(s:GameState,id:string){if(s.phase!=='world')return false;const item=s.inventory.find(i=>i.id===id);if(!item)return false;s.equipment[item.slot]=id;s.player.hp=Math.min(s.player.hp,stats(s).hp);return true;}
-export function salvage(s:GameState,id:string){if(s.phase!=='world'||Object.values(s.equipment).includes(id))return false;const index=s.inventory.findIndex(i=>i.id===id),mailIndex=s.mailbox.findIndex(i=>i.id===id);const item=index>=0?s.inventory[index]:mailIndex>=0?s.mailbox[mailIndex]:null;if(!item||item.fav)return false;s.shards+=3*item.rarity*item.tier;if(index>=0)s.inventory.splice(index,1);else s.mailbox.splice(mailIndex,1);transferMailbox(s);return true;}
+export function salvage(s:GameState,id:string){if(s.phase!=='world'||Object.values(s.equipment).includes(id))return false;const index=s.inventory.findIndex(i=>i.id===id),mailIndex=s.mailbox.findIndex(i=>i.id===id);const item=index>=0?s.inventory[index]:mailIndex>=0?s.mailbox[mailIndex]:null;if(!item||item.fav)return false;s.shards+=salvageValue(item);if(index>=0)s.inventory.splice(index,1);else s.mailbox.splice(mailIndex,1);transferMailbox(s);return true;}
 export function favorite(s:GameState,id:string){const item=[...s.inventory,...s.mailbox].find(i=>i.id===id);if(!item)return false;item.fav=!item.fav;return true;}
 export function transferMailbox(s:GameState){while(s.inventory.length<24&&s.mailbox.length)s.inventory.push(s.mailbox.shift()!);}
-export function giveItem(s:GameState,item:Item){if(s.inventory.some(i=>i.id===item.id)||s.mailbox.some(i=>i.id===item.id))return false;if(s.inventory.length<24)s.inventory.push(item);else s.mailbox.push(item);return true;}
-export function craftItem(s:GameState){if(s.phase!=='world'||Math.hypot(s.player.x,s.player.z)>12)return null;const tier=Math.max(1,s.stats.bestTier),cost=35+20*tier;if(s.shards<cost)return null;s.shards-=cost;s.crafts++;const item=makeItem(hash(s.seed,'craft',s.crafts),tier,s.player.classId,`craft:${s.seed}:${s.crafts}`,{bonus:15,altChance:s.blueprints.includes(ALT_FAMILY[s.player.classId])?.35:0});giveItem(s,item);return item;}
-export function craftFamily(s:GameState,family:string){const def=FAMILIES[family];if(!def||s.phase!=='world'||Math.hypot(s.player.x,s.player.z)>12||def.classId!==s.player.classId||family===BASE_FAMILY[def.classId]||!s.blueprints.includes(family))return null;const tier=Math.max(1,s.stats.bestTier),cost=WORKSHOP_COST(tier);if(s.shards<cost)return null;s.shards-=cost;s.crafts++;const item=makeItem(hash(s.seed,'craft-family',s.crafts),tier,s.player.classId,`craft:${s.seed}:${s.crafts}`,{slot:'instrument',bonus:15,family});giveItem(s,item);return item;}
+export const MAILBOX_LIMIT=2000;
+export const hasItemSpace=(s:GameState)=>s.inventory.length<24||s.mailbox.length<MAILBOX_LIMIT;
+export function giveItem(s:GameState,item:Item):'bag'|'mail'|'shards'|false {
+ if(s.inventory.some(i=>i.id===item.id)||s.mailbox.some(i=>i.id===item.id))return false;
+ if(s.inventory.length<24){s.inventory.push(item);return 'bag';}
+ if(s.mailbox.length<MAILBOX_LIMIT){s.mailbox.push(item);return 'mail';}
+ s.shards+=salvageValue(item);return 'shards';
+}
+export function craftItem(s:GameState){if(!hasItemSpace(s))return null;if(s.phase!=='world'||Math.hypot(s.player.x,s.player.z)>12)return null;const tier=Math.max(1,s.stats.bestTier),cost=35+20*tier;if(s.shards<cost)return null;s.shards-=cost;s.crafts++;const item=makeItem(hash(s.seed,'craft',s.crafts),tier,s.player.classId,`craft:${s.seed}:${s.crafts}`,{bonus:15,altChance:s.blueprints.includes(ALT_FAMILY[s.player.classId])?.35:0});giveItem(s,item);return item;}
+export function craftFamily(s:GameState,family:string){if(!hasItemSpace(s))return null;const def=FAMILIES[family];if(!def||s.phase!=='world'||Math.hypot(s.player.x,s.player.z)>12||def.classId!==s.player.classId||family===BASE_FAMILY[def.classId]||!s.blueprints.includes(family))return null;const tier=Math.max(1,s.stats.bestTier),cost=WORKSHOP_COST(tier);if(s.shards<cost)return null;s.shards-=cost;s.crafts++;const item=makeItem(hash(s.seed,'craft-family',s.crafts),tier,s.player.classId,`craft:${s.seed}:${s.crafts}`,{slot:'instrument',bonus:15,family});giveItem(s,item);return item;}
 export function respec(s:GameState){if(s.phase!=='world'||Math.hypot(s.player.x,s.player.z)>12)return false;s.respecPoints+=Object.values(s.upgrades).reduce((a,b)=>a+b,0);s.upgrades={};s.player.hp=Math.min(s.player.hp,stats(s).hp);return true;}
 export function spendRespec(s:GameState,id:string){const d=UPGRADE_BY_ID[id];if(s.phase!=='world'||Math.hypot(s.player.x,s.player.z)>12||!d||s.respecPoints<=0||d.minTier>Math.max(1,s.stats.bestTier)||(d.classId&&d.classId!==s.player.classId)||(s.upgrades[id]??0)>=d.max)return false;s.respecPoints--;s.upgrades[id]=(s.upgrades[id]??0)+1;return true;}
 export function offerUpgrades(s:GameState,tier:number,seed:number):UpgradeOffer[]{
@@ -81,7 +88,7 @@ export function newGame(seed:number,classId:ClassId,mode:'standard'|'explorer'='
  const s:GameState={version:DATA_VERSION,generator:GENERATOR_VERSION,rules:RULES_VERSION,seed:seed>>>0,phase:'world',mode,player:{classId,x:1.5,z:4,hp:CLASSES[classId].hp,energy:100,xp:0,potions:3,faceX:0,faceZ:-1,cooldowns:{attack:0,skill:0,burst:0,dash:0,heal:0},invuln:0,dashTime:0,dashX:0,dashZ:0,shield:0,guard:0,lastDamage:0},inventory:[starter],equipment:{instrument:starter.id},mailbox:[],upgrades:{},shards:0,respecPoints:0,crafts:0,discovered:['main:1'],explored:['0,0'],collected:[],seals:[],completions:{},attempts:0,rareMisses:0,finalCleared:false,run:null,reward:null,stats:{kills:0,portals:0,deaths:0,seconds:0,bestTier:0},journal:['intro'],mastery:{health:0,energy:0,fortune:0},updated:Date.now(),encounters:{},npcs:{},loadout:{skill:'default'},blueprints:[],rank:{selected:0,best:0}};
  return s;
 }
-export function itemLines(i:Item){const a:string[]=[];if(i.family&&FAMILIES[i.family])a.push(`Семейство: ${FAMILIES[i.family].name}. ${FAMILIES[i.family].tradeoff}`);if(i.damage)a.push(`+${i.damage} к урону`);if(i.hp)a.push(`+${i.hp} к здоровью`);if(i.armor)a.push(`−${(i.armor*100).toFixed(1)}% получаемого урона`);if(i.crit)a.push(`+${(i.crit*100).toFixed(1)}% критического шанса`);if(i.haste)a.push(`+${(i.haste*100).toFixed(1)}% скорости атаки`);if(i.effect!=='none')a.push(EFFECTS[i.effect]);return a;}
+export function itemLines(i:Item){const a:string[]=[];if(i.refit)a.push(`Доводка: ${i.refit}/3`);if(i.family&&FAMILIES[i.family])a.push(`Семейство: ${FAMILIES[i.family].name}. ${FAMILIES[i.family].tradeoff}`);if(i.damage)a.push(`+${i.damage} к урону`);if(i.hp)a.push(`+${i.hp} к здоровью`);if(i.armor)a.push(`−${(i.armor*100).toFixed(1)}% получаемого урона`);if(i.crit)a.push(`+${(i.crit*100).toFixed(1)}% критического шанса`);if(i.haste)a.push(`+${(i.haste*100).toFixed(1)}% скорости атаки`);if(i.effect!=='none')a.push(EFFECTS[i.effect]);return a;}
 export function compareItem(s:GameState,candidate:Item){
  const current=s.inventory.find(i=>i.id===s.equipment[candidate.slot])??null;
  const before=stats(s);
@@ -98,4 +105,45 @@ export function compareItem(s:GameState,candidate:Item){
  add('Скорость',after.speed-before.speed,1,' м/с');
  add('Заряд',after.energyRegen-before.energyRegen,1,'/с');
  return {rows,lost:before.effects.find(effect=>!after.effects.includes(effect))??null,gained:after.effects.find(effect=>!before.effects.includes(effect))??null,current};
+}
+
+// Selected from the three revisions: fixed costs, bounded upgrades and exact previews.
+const atStation=(s:GameState)=>s.phase==='world'&&Math.hypot(s.player.x,s.player.z)<12;
+const findItem=(s:GameState,id:string)=>s.inventory.find(i=>i.id===id)??s.mailbox.find(i=>i.id===id);
+export const craftSlotCost=(tier:number)=>Math.round((35+20*tier)*1.2);
+export function craftSlot(s:GameState,slot:Slot){
+ if(!atStation(s)||!hasItemSpace(s)||!['instrument','shell','relic'].includes(slot))return null;
+ const tier=Math.max(1,s.stats.bestTier),cost=craftSlotCost(tier);if(s.shards<cost)return null;
+ const item=makeItem(hash(s.seed,'craft-slot',s.crafts+1),tier,s.player.classId,`craft:${s.seed}:${s.crafts+1}`,{slot,bonus:15,altChance:s.blueprints.includes(ALT_FAMILY[s.player.classId])?.35:0});
+ if(!giveItem(s,item))return null;s.shards-=cost;s.crafts++;return item;
+}
+export const refitCost=(i:Item)=>(15+10*i.tier)*((i.refit??0)+1);
+export const retuneCost=(i:Item)=>45+25*i.tier;
+export function refitPreview(i:Item){return {cost:refitCost(i),left:3-(i.refit??0),damage:i.slot==='instrument'?Math.round(1.5*i.tier+1):i.slot==='relic'?1+i.tier:0,hp:i.slot==='shell'?3*i.tier+2:0,armor:i.slot==='shell'?i.tier*.003:0,crit:i.slot==='relic'?.004:0};}
+export function refitItem(s:GameState,id:string){
+ const i=findItem(s,id);if(!i||!atStation(s)||(i.refit??0)>=3)return null;
+ const p=refitPreview(i);if(s.shards<p.cost)return null;
+ s.shards-=p.cost;i.refit=(i.refit??0)+1;i.damage+=p.damage;i.hp+=p.hp;
+ i.armor=Math.round((i.armor+p.armor)*10000)/10000;i.crit=Math.round((i.crit+p.crit)*10000)/10000;return i;
+}
+export function retuneItem(s:GameState,id:string,effect:Item['effect']){
+ const i=findItem(s,id);if(!i||!atStation(s)||i.rarity<3||i.effect===effect||!['first','barrier','battery','siphon'].includes(effect))return null;
+ const cost=retuneCost(i);if(s.shards<cost)return null;s.shards-=cost;i.effect=effect;return i;
+}
+export const salvageValue=(i:Item)=>3*i.rarity*i.tier+(i.refit??0)*4;
+export type InventoryFilter='all'|Slot;
+export interface BulkPreview {maxRarity:number;slot:InventoryFilter;items:Item[];shards:number}
+export function bulkPreview(s:GameState,maxRarity:number,slot:InventoryFilter='all'):BulkPreview {
+ const valid=Number.isInteger(maxRarity)&&maxRarity>=1&&maxRarity<=2&&['all','instrument','shell','relic'].includes(slot);
+ const equipped=Object.values(s.equipment);
+ const items=valid?[...s.inventory,...s.mailbox].filter(i=>!i.fav&&!equipped.includes(i.id)&&!(i.refit??0)&&!i.family&&i.rarity<=maxRarity&&(slot==='all'||i.slot===slot)):[];
+ // Snapshot, not live references: changing a favourite or value invalidates confirmation.
+ return {maxRarity,slot,items:structuredClone(items),shards:items.reduce((n,i)=>n+salvageValue(i),0)};
+}
+export function salvageBulk(s:GameState,preview:BulkPreview){
+ if(s.phase!=='world'||!preview.items.length)return null;
+ const current=bulkPreview(s,preview.maxRarity,preview.slot);
+ if(JSON.stringify(current)!==JSON.stringify(preview))return null;
+ const ids=new Set(current.items.map(i=>i.id));s.inventory=s.inventory.filter(i=>!ids.has(i.id));s.mailbox=s.mailbox.filter(i=>!ids.has(i.id));s.shards+=current.shards;transferMailbox(s);
+ return {count:ids.size,shards:current.shards};
 }

@@ -44,11 +44,11 @@ test('Save migration leaves the source untouched and rejects unknown generator a
  old.player.xp=145;
  const before=clone(old),converted=validateState(old);
  assert.deepEqual(old,before,'a successful import must not mutate the source');
- assert.equal(converted.version,2);
+ assert.equal(converted.version,3);
  assert.equal(converted.generator,2);
  assert.equal(converted.rules,2);
  assert.equal(levelInfo(converted.player.xp).level,2);
- const archived=clone(current);archived.generator=1;delete archived.rules;const archivedBefore=clone(archived);
+ const archived=clone(current);archived.version=2;archived.generator=1;delete archived.rules;const archivedBefore=clone(archived);
  assert.equal(validateState(archived).generator,2,'the other candidate release remains importable');
  assert.deepEqual(archived,archivedBefore,'archived import is not changed in place');
  for(const patch of [{generator:99},{rules:99},{version:99}]){
@@ -76,16 +76,16 @@ test('A named elite at its rounded maximum health remains a valid saved encounte
  s.encounters[found.id]={done:false,disabled:false,hp:found.units.map((u,i)=>i===0?Math.round(enemyNumbers(u,found.tier).hp*2.6):enemyNumbers(u,found.tier).hp)};
  assert.doesNotThrow(()=>validateState(clone(s)));
 });
-test('v1 save migrates to v2: level, items and progress preserved; new fields defaulted',()=>{
+test('v1 save migrates to current format: level, items and progress preserved; new fields defaulted',()=>{
  const s=clone(newGame(7,'harvester'));s.player.xp=1200;const level=levelInfo(1200).level;s.seals=[1];
  // build a v1 document as the previous release wrote it
  const v1=clone(s);v1.version=1;v1.generator=1;delete v1.rules;for(const k of ['encounters','npcs','loadout','blueprints','rank'])delete v1[k];
  const old=(l)=>60+l*35;let lv=1,left=1200;while(lv<20&&left>=old(lv)){left-=old(lv);lv++;}v1.player.xp=1200;
- const migrated=validateState(clone(v1));assert.equal(migrated.version,2);assert.deepEqual(migrated.encounters,{});assert.equal(migrated.loadout.skill,'default');
+ const migrated=validateState(clone(v1));assert.equal(migrated.version,3);assert.deepEqual(migrated.encounters,{});assert.equal(migrated.loadout.skill,'default');
  assert.equal(levelInfo(migrated.player.xp).level,lv,'level is kept');assert.deepEqual(migrated.seals,[1]);assert.equal(migrated.inventory.length,1);
  const again=validateState(clone(migrated));assert.equal(levelInfo(again.player.xp).level,lv,'migration is idempotent');
  assert.ok(convertXp(0)===0);
- const packed=envelope(migrated);assert.equal(unpack(packed).version,2);
+ const packed=envelope(migrated);assert.equal(unpack(packed).version,3);
 });
 test('BAL: early levels arrive faster, middle levels slower than v1',()=>{
  assert.ok(xpNeeded(1)<95&&xpNeeded(5)<235);assert.equal(xpNeeded(6),270);assert.ok(xpNeeded(12)>60+12*35);

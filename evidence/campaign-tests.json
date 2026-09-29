@@ -153,7 +153,7 @@
       "portalWins": 6,
       "gameSeconds": 304.31666666671856,
       "level": 16,
-      "wallMs": 2833.203
+      "wallMs": 3763.2745
     },
     {
       "seed": 19320422,
@@ -304,7 +304,7 @@
       "portalWins": 6,
       "gameSeconds": 462.69999999990785,
       "level": 16,
-      "wallMs": 2852.0573
+      "wallMs": 4081.9177
     },
     {
       "seed": 19320422,
@@ -455,7 +455,7 @@
       "portalWins": 6,
       "gameSeconds": 356.4833333333378,
       "level": 16,
-      "wallMs": 2548.2347
+      "wallMs": 3727.2615000000005
     }
   ]
 }

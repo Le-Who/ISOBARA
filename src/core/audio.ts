@@ -1,4 +1,4 @@
-import type {Settings} from './types.js';
+import type {Settings,Theme} from './types.js';
 export class AudioSystem {
  private ctx:AudioContext|null=null;private master:GainNode|null=null;private music:GainNode|null=null;private effects:GainNode|null=null;private nextChord=0;private chord=0;private paused=false;private last:Record<string,number>={};
  constructor(private settings:Settings){}
@@ -18,9 +18,10 @@ export class AudioSystem {
   else if(type==='level'||type==='loot'||type==='room'){for(let i=0;i<4;i++)this.tone(293.66*[1,1.25,1.5,2][i],293.66*[1,1.25,1.5,2][i],.65,.04,'sine',false,i*.10);}
   else if(type==='cast'){this.tone(90,290,.36,.075,'triangle');this.tone(700,1100,.4,.026,'sine');}
   else if(type==='portal'){this.tone(70,380,.85,.10,'sine');this.tone(500,90,.85,.04,'triangle');}
+  else if(type==='restore'){for(let i=0;i<6;i++){const f=293.66*2**([0,4,7,9,12,16][i]/12);this.tone(f,f,1.1,.04,'sine',false,i*.13);}}
   else if(type==='ui')this.tone(600,720,.07,.025,'sine');
   else if(type==='step')this.tone(100,45,.04,.019,'triangle');
  }
- tick(combat=false){if(!this.ctx||this.paused||this.settings.music===0)return;const now=this.ctx.currentTime;if(now<this.nextChord)return;this.nextChord=now+7.5;const roots=[146.832,130.813,174.614,164.814],root=roots[this.chord++%4];for(const ratio of [1,1.5,2.25])this.tone(root*ratio,root*ratio,8,.025,'sine',true);if(combat)this.tone(root/2,root/2,7.3,.035,'triangle',true);this.tone(root*4,root*4,1.8,.014,'sine',true,1.8);this.tone(root*3,root*3,1.7,.01,'sine',true,4.4);}
+ tick(combat=false,theme:Theme='garden',seals=0){if(!this.ctx||this.paused||this.settings.music===0)return;const now=this.ctx.currentTime;if(now<this.nextChord)return;this.nextChord=now+7.5;const roots={garden:[146.832,130.813,174.614,164.814],foundry:[130.813,116.541,146.832,155.563],archive:[155.563,146.832,174.614,130.813]}[theme],root=roots[this.chord++%4];for(const ratio of [1,1.5,2.25])this.tone(root*ratio,root*ratio,8,.025,'sine',true);if(seals>=2)this.tone(root*2.5,root*2.5,7,.006+Math.min(seals,5)*.001,'sine',true,.6);if(combat)this.tone(root/2,root/2,7.3,.035,'triangle',true);this.tone(root*4,root*4,1.8,.014,'sine',true,1.8);this.tone(root*3,root*3,1.7,.01,'sine',true,4.4);}
  status(){return this.ctx?.state??'not-started';}
 }

@@ -1,6 +1,6 @@
 {
   "name": "isobara",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
   "description": "ИЗОБАРА — Последний сад погоды. Законченная одиночная 3D action-RPG.",
@@ -8,10 +8,12 @@
     "build": "node tools/build.mjs",
     "dev": "node tools/build.mjs --dev && node tools/serve.mjs --dev",
     "start": "node tools/serve.mjs",
-    "test": "node tools/build.mjs --test && node --test tests/core.test.mjs tests/build.test.mjs tests/v2.test.mjs",
+    "test": "node tools/build.mjs --test && node --test tests/core.test.mjs tests/build.test.mjs tests/v2.test.mjs tests/integration.test.mjs tests/cloud.test.mjs",
     "check": "tsc --noEmit",
     "test:browser": "node tools/build.mjs --test && node tests/make-fixtures.mjs && python tests/browser_test.py",
-    "test:campaign": "node tools/build.mjs --test && node tests/playthrough.mjs"
+    "test:campaign": "node tools/build.mjs --test && node tests/playthrough.mjs",
+    "cloud": "node tools/cloud-server.mjs",
+    "balance": "node tools/build.mjs --test && node tools/balance-report.mjs"
   },
   "devDependencies": {
     "typescript": "5.8.3"

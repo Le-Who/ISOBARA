@@ -1,0 +1,72 @@
+{
+  "status": "passed",
+  "method": "Public DOM actions and imported test fixtures; diagnostics read only. No gameplay mutation through browser evaluation.",
+  "checks": [
+    {
+      "name": "Startup never probes a cloud endpoint",
+      "passed": true
+    },
+    {
+      "name": "Refit works with real colon-containing IDs",
+      "passed": true
+    },
+    {
+      "name": "Retuning uses separate effect and full item identifier",
+      "passed": true
+    },
+    {
+      "name": "Slot filter shows only the selected slot",
+      "passed": true
+    },
+    {
+      "name": "Bulk preview lists only the selected unprotected shell",
+      "passed": true
+    },
+    {
+      "name": "Bulk salvage keeps refitted, alternative-family and rare items",
+      "passed": true
+    },
+    {
+      "name": "Directed craft produces a relic through actual UI",
+      "passed": true
+    },
+    {
+      "name": "Costs charged once through UI",
+      "passed": true
+    },
+    {
+      "name": "Explicit cloud upload returns a recovery code",
+      "passed": true
+    },
+    {
+      "name": "Recovery secret is absent from all network URLs",
+      "passed": true
+    },
+    {
+      "name": "Unavailable service leaves local inventory intact",
+      "passed": true
+    },
+    {
+      "name": "Successful download requires import confirmation",
+      "passed": true
+    },
+    {
+      "name": "Cloud snapshot restores refit and chosen effect",
+      "passed": true
+    },
+    {
+      "name": "Quality low/high/low has no WebGL sampler or shader errors",
+      "passed": true
+    },
+    {
+      "name": "Restored world renders at low quality without particles",
+      "passed": true
+    },
+    {
+      "name": "No JS exceptions in feature flow",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "browser": "153.0.8010.12"
+}

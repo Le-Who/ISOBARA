@@ -24,6 +24,13 @@ EXCLUDE_PARTS = {"__pycache__", "fixtures", ".test-build", "node_modules"}
 EXCLUDE_SUFFIXES = {".pyc", ".pyo", ".log"}
 
 
+def keep_evidence(p: Path) -> bool:
+    parts = p.relative_to(ROOT).parts
+    if parts[0] != 'evidence' or parts[1] == 'asset-audit':
+        return True
+    return p.suffix.lower() in {'.md', '.json', '.py'} and p.name not in {'browser-export.json', 'state.json'}
+
+
 def run(*args: str) -> None:
     executable = args[0] + ".cmd" if os.name == "nt" and args[0] == "npm" else args[0]
     subprocess.run((executable, *args[1:]), cwd=ROOT, check=True)
@@ -39,7 +46,8 @@ def source_files() -> list[Path]:
         if folder.is_dir():
             files.extend(p for p in folder.rglob("*") if p.is_file()
                          and not EXCLUDE_PARTS.intersection(p.relative_to(ROOT).parts)
-                         and p.suffix.lower() not in EXCLUDE_SUFFIXES)
+                         and p.suffix.lower() not in EXCLUDE_SUFFIXES
+                         and keep_evidence(p))
     return sorted(set(files), key=lambda p: p.relative_to(ROOT).as_posix())
 
 

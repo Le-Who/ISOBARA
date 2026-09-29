@@ -41,7 +41,7 @@ export interface Player extends Vec {
 export interface Item {
  id:string; name:string; slot:Slot; tier:number; rarity:1|2|3|4; icon:string;
  damage:number; hp:number; armor:number; crit:number; haste:number;
- effect:'none'|'first'|'barrier'|'battery'|'siphon'; family?:string; fav?:boolean;
+ effect:'none'|'first'|'barrier'|'battery'|'siphon'; family?:string; fav?:boolean; refit?:number;
 }
 export interface UpgradeOffer { id:string; from:number; to:number; supply?:'health'|'energy'|'fortune' }
 export interface PendingReward { runId:string; offers:UpgradeOffer[]; item:Item; tier:number; firstSeal:boolean; final:boolean }
@@ -51,7 +51,7 @@ export interface RunState {
 }
 export interface Statistics { kills:number; portals:number; deaths:number; seconds:number; bestTier:number }
 export interface GameState {
- version:2; generator:2; rules:2; seed:number; phase:Phase; mode:'standard'|'explorer'; player:Player;
+ version:3; generator:2; rules:2; seed:number; phase:Phase; mode:'standard'|'explorer'; player:Player;
  inventory:Item[]; equipment:Partial<Record<Slot,string>>; mailbox:Item[]; upgrades:Record<string,number>;
  shards:number; respecPoints:number; crafts:number; discovered:string[]; explored:string[]; collected:string[]; seals:number[];
  completions:Record<string,number>; attempts:number; rareMisses:number; finalCleared:boolean;

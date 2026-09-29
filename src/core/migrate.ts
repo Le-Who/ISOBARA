@@ -1,6 +1,6 @@
 // Data, world generation, and combat rules are versioned separately. Migrations
 // never change their input, so a failed import cannot damage a loaded snapshot.
-export const DATA_VERSION=2;
+export const DATA_VERSION=3;
 export const GENERATOR_VERSION=2;
 export const RULES_VERSION=2;
 
@@ -20,7 +20,8 @@ export function migrate(input:any):any{
  if(input.version===DATA_VERSION&&input.generator===GENERATOR_VERSION&&input.rules===RULES_VERSION)return input;
  const legacy=input.version===1&&input.generator===1&&(input.rules===undefined||input.rules===1);
  const candidate=input.version===2&&input.generator===1&&input.rules===undefined;
- if(!legacy&&!candidate)throw new Error('Версия сохранения не поддерживается этой сборкой. Исходный файл не изменён.');
+ const v2=input.version===2&&input.generator===2&&input.rules===2;
+ if(!legacy&&!candidate&&!v2)throw new Error('Версия сохранения не поддерживается этой сборкой. Исходный файл не изменён.');
  const copy=structuredClone(input);
  if(legacy){
   if(copy.player&&typeof copy.player.xp==='number'&&Number.isFinite(copy.player.xp)&&copy.player.xp>=0)copy.player.xp=convertXp(copy.player.xp);
