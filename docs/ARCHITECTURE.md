@@ -1,6 +1,6 @@
 # Architecture
 
-The existing runtime is TypeScript with locally vendored Three.js. Keep the 3D scene, camera, authored model kit, local UI images and offline builds when implementing roadmap packages. A general roadmap request does not authorize an engine migration, a 2D rewrite, asset removal or replacement of existing visuals with placeholders. Those changes require a separate explicit owner request. See [AGENTS.md](../AGENTS.md).
+The existing runtime is TypeScript with locally vendored Three.js. Before changes, follow the [repository rules and reading routes](CODING_STANDARDS.md#scope).
 
 `src/core` contains deterministic game rules, combat, progression, validation, persistence, input and Web Audio synthesis. `Simulation` accepts input frames; visual rendering never awards loot or applies damage independently. `GameState` is the serializable source of truth. Short-lived projectiles, visual events and spatial lookup arrays live outside the save.
 
